@@ -31,7 +31,7 @@ Captured from the **0.16.6 Mac desktop application**, using the built-in demo or
 
 ## Downloads and support
 
-First public test version: **0.16.6**. Downloads are provided through [GitHub Releases](https://github.com/lipeihaoname-creator/chatgpt-pulse/releases/tag/v0.16.6).
+First public test version: **0.16.6**. Downloads are provided through [GitHub Releases](https://github.com/voidlph-dev/chatgpt-pulse/releases/tag/v0.16.6).
 
 | Platform | Package | Verification scope |
 |---|---|---|

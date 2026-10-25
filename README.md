@@ -40,7 +40,7 @@ Mac / Windows 桌面上的 Work / Codex 工作监测与角色悬浮窗。读取�
 
 ## 安装与使用
 
-两端统一为 **0.16.6 首个公开测试版**。从 [GitHub Releases](https://github.com/lipeihaoname-creator/chatgpt-pulse/releases/tag/v0.16.6) 下载适合你系统的安装包。
+两端统一为 **0.16.6 首个公开测试版**。从 [GitHub Releases](https://github.com/voidlph-dev/chatgpt-pulse/releases/tag/v0.16.6) 下载适合你系统的安装包。
 
 | 下载文件 | 用途 |
 |---|---|

@@ -4,9 +4,9 @@
 
 ## 实机演示
 
-[查看完整实机演示图集](https://github.com/lipeihaoname-creator/chatgpt-pulse/blob/main/docs/DEMOS.md)：头像互动、两名角色的表情与粒子、多任务分开／合并显示、主题配色与头像裁剪。均为 Mac 桌面应用实际采集，使用合成演示或隔离模拟日志，不代表真实模型速度。
+[查看完整实机演示图集](https://github.com/voidlph-dev/chatgpt-pulse/blob/main/docs/DEMOS.md)：头像互动、两名角色的表情与粒子、多任务分开／合并显示、主题配色与头像裁剪。均为 Mac 桌面应用实际采集，使用合成演示或隔离模拟日志，不代表真实模型速度。
 
-![Mac 实机头像点击互动 · 合成演示](https://raw.githubusercontent.com/lipeihaoname-creator/chatgpt-pulse/main/docs/media/avatar-interaction-macos.gif)
+![Mac 实机头像点击互动 · 合成演示](https://raw.githubusercontent.com/voidlph-dev/chatgpt-pulse/main/docs/media/avatar-interaction-macos.gif)
 
 ## 下载选择
 
@@ -27,7 +27,7 @@
 
 ## 验证边界
 
-Mac 结果见 [Mac 验收](https://github.com/lipeihaoname-creator/chatgpt-pulse/blob/main/docs/MAC_ACCEPTANCE.md)，Windows 本机交接结果见 [Windows 验收](https://github.com/lipeihaoname-creator/chatgpt-pulse/blob/main/docs/WINDOWS_ACCEPTANCE.md)。Intel 实机、其他电脑、Windows 10、Windows ARM64、缺少 WebView2 的干净环境仍分别列为未测；不把编译、浏览器模拟或另一平台的通过记录冒充实机验收。GitHub CI 结果以仓库实际运行记录为准，不以本地测试代替。
+Mac 结果见 [Mac 验收](https://github.com/voidlph-dev/chatgpt-pulse/blob/main/docs/MAC_ACCEPTANCE.md)，Windows 本机交接结果见 [Windows 验收](https://github.com/voidlph-dev/chatgpt-pulse/blob/main/docs/WINDOWS_ACCEPTANCE.md)。Intel 实机、其他电脑、Windows 10、Windows ARM64、缺少 WebView2 的干净环境仍分别列为未测；不把编译、浏览器模拟或另一平台的通过记录冒充实机验收。GitHub CI 结果以仓库实际运行记录为准，不以本地测试代替。
 
 Mac 使用临时签名，未完成 Developer ID 签名和公证；Windows EXE 未签名。没有购买签名服务，也不要求用户关闭系统安全功能。普通聊天、浏览器聊天及没有兼容日志的云端 Work 不支持。
 
@@ -37,4 +37,4 @@ Mac 使用临时签名，未完成 Developer ID 签名和公证；Windows EXE �
 
 本项目为非官方、非商业同人项目，与 OpenAI 和原作官方无关联。麻衣、洛琪希图集为 AI 辅助制作的非官方同人素材，原角色相关权利归各自权利人所有，项目代码许可不授予角色素材的相关权利，不表示获得官方授权或背书。
 
-遇到问题请附上系统版本、缩放设置、复现步骤和脱敏截图，通过 [Issues](https://github.com/lipeihaoname-creator/chatgpt-pulse/issues) 反馈；不要上传个人日志、聊天正文、账号凭据或设置数据库。
+遇到问题请附上系统版本、缩放设置、复现步骤和脱敏截图，通过 [Issues](https://github.com/voidlph-dev/chatgpt-pulse/issues) 反馈；不要上传个人日志、聊天正文、账号凭据或设置数据库。
