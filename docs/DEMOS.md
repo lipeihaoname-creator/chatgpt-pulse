@@ -22,7 +22,7 @@ These are real captures of the packaged Mac desktop app, not browser mockups. Da
 
 | 麻衣：害羞、忍笑、鼓脸与工作状态 | 洛琪希：思考、工具、害羞、困倦与完成 |
 |---|---|
-| <img src="media/mai-expressions-macos.gif" alt="Mac 原生设置预览：麻衣表情和工作状态切换，合成数据" width="500"> | <img src="media/roxy-expressions-macos.gif" alt="Mac 原生设置预览：洛琪希表情、工作状态和符文，合成数据" width="500"> |
+| <img src="media/mai-expressions-macos.gif" alt="Mac 原生设置预览：麻衣表情和工作状态切换，合成数据" width="320"> | <img src="media/roxy-expressions-macos.gif" alt="Mac 原生设置预览：洛琪希表情、工作状态和符文，合成数据" width="320"> |
 
 ## 并行任务：一个头像，两种显示方式
 
@@ -30,7 +30,7 @@ These are real captures of the packaged Mac desktop app, not browser mockups. Da
 
 | 多个气泡，上下排列 | 一个气泡，分行显示 |
 |---|---|
-| <img src="media/multitask-separate-macos.png" alt="原生 Mac 悬浮条：三个模拟任务分别显示，共享一个头像" width="440"> | <img src="media/multitask-combined-macos.png" alt="原生 Mac 悬浮条：三个模拟任务合并显示，各自保留数字与脉冲" width="440"> |
+| <img src="media/multitask-separate-macos.png" alt="原生 Mac 悬浮条：三个模拟任务分别显示，共享一个头像" width="360"> | <img src="media/multitask-combined-macos.png" alt="原生 Mac 悬浮条：三个模拟任务合并显示，各自保留数字与脉冲" width="360"> |
 
 主窗口中的并行任务列表：
 

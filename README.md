@@ -12,7 +12,7 @@ Mac / Windows 桌面上的 Work / Codex 工作监测与角色悬浮窗。读取�
 
 | 点击头像互动 · 实际悬浮窗 | 洛琪希表情与符文 · 应用内预览 |
 |---|---|
-| <img src="docs/media/avatar-interaction-macos.gif" alt="Mac 实机：点击麻衣头像出现逐字对话、表情与兔子粒子，数据为合成演示" width="420"> | <img src="docs/media/roxy-expressions-macos.gif" alt="Mac 桌面应用内预览：洛琪希的状态表情切换与符文粒子，合成数据" width="420"> |
+| <img src="docs/media/avatar-interaction-macos.gif" alt="Mac 实机：点击麻衣头像出现逐字对话、表情与兔子粒子，数据为合成演示" width="320"> | <img src="docs/media/roxy-expressions-macos.gif" alt="Mac 桌面应用内预览：洛琪希的状态表情切换与符文粒子，合成数据" width="320"> |
 
 | 多个任务气泡 | 一个气泡分行显示 |
 |---|---|

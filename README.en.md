@@ -10,7 +10,7 @@ Captured from the **0.16.6 Mac desktop application**, using the built-in demo or
 
 | Avatar click interaction · actual overlay | Roxy expressions and runes · in-app preview |
 |---|---|
-| <img src="docs/media/avatar-interaction-macos.gif" alt="Native Mac overlay: click interaction, typewriter dialogue, expressions and rabbit particles; synthetic data" width="420"> | <img src="docs/media/roxy-expressions-macos.gif" alt="Native Mac settings preview: Roxy expression transitions and rune particles; synthetic data" width="420"> |
+| <img src="docs/media/avatar-interaction-macos.gif" alt="Native Mac overlay: click interaction, typewriter dialogue, expressions and rabbit particles; synthetic data" width="320"> | <img src="docs/media/roxy-expressions-macos.gif" alt="Native Mac settings preview: Roxy expression transitions and rune particles; synthetic data" width="320"> |
 
 | Separate task bubbles | Combined task rows |
 |---|---|
