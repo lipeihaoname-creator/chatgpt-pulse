@@ -16,7 +16,7 @@ PUBLIC_DOCS = [
     'DEPENDENCIES.md', 'LICENSING.md', 'RELEASE.md', 'WINDOWS_DEPENDENCIES.md',
     'WINDOWS_INSTALL.md', 'WINDOWS_BUILD.md', 'WINDOWS_ACCEPTANCE.md',
     'RELEASE_READINESS.md', 'MAC_INSTALL.md', 'MAC_ACCEPTANCE.md',
-    'RELEASE_0.16.6.zh-CN.md',
+    'RELEASE_0.16.6.zh-CN.md', 'DEMOS.md',
 ]
 BLOCKED = {'.tools', 'node_modules', 'target', 'dist', 'release', 'test-results',
            '.git', '.codex', '.agents', '.aws', '__pycache__', '.venv', 'design'}
@@ -30,7 +30,7 @@ def selected_sources(root):
     root = Path(root)
     files = [root / name for name in ROOT_FILES]
     files += [root / 'docs' / name for name in PUBLIC_DOCS]
-    for folder in ['src', 'licenses', 'tests', '.github']:
+    for folder in ['src', 'licenses', 'tests', '.github', 'docs/media']:
         files += [p for p in (root / folder).rglob('*') if p.is_file()]
     files += [p for p in (root / 'scripts').iterdir() if p.is_file() and p.name not in {
         'windows-cloud-source-probe.mjs', 'package-windows-test-kit.py',

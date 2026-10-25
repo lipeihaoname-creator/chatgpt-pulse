@@ -4,6 +4,31 @@
 
 A lightweight desktop monitor for compatible local Work / Codex logs on macOS and Windows. Shows task state, reported token usage and report-interval rates, with a compact bar or character overlay. Built with Tauri 2, Rust, Svelte and SQLite.
 
+## Native demos
+
+Captured from the **0.16.6 Mac desktop application**, using the built-in demo or isolated synthetic log fixtures. Numbers illustrate the interface, not real model performance. No real conversations are shown. See the [full gallery and capture notes](docs/DEMOS.md).
+
+| Avatar click interaction · actual overlay | Roxy expressions and runes · in-app preview |
+|---|---|
+| <img src="docs/media/avatar-interaction-macos.gif" alt="Native Mac overlay: click interaction, typewriter dialogue, expressions and rabbit particles; synthetic data" width="420"> | <img src="docs/media/roxy-expressions-macos.gif" alt="Native Mac settings preview: Roxy expression transitions and rune particles; synthetic data" width="420"> |
+
+| Separate task bubbles | Combined task rows |
+|---|---|
+| <img src="docs/media/multitask-separate-macos.png" alt="Three synthetic tasks share one portrait, with independent bubbles and activity pulses" width="360"> | <img src="docs/media/multitask-combined-macos.png" alt="Three synthetic tasks share a combined bubble while retaining separate metrics" width="360"> |
+
+<details>
+<summary>Overview, personalization and six themes</summary>
+
+![Native Mac overview with synthetic demo data](docs/media/overview-macos.png)
+
+![Personalization in the Mac desktop application](docs/media/personalization-mai-macos.png)
+
+![Six themes captured from the native settings preview](docs/media/themes-macos.png)
+
+[Open the full gallery: both characters, parallel tasks, image cropping and capture notes](docs/DEMOS.md)
+
+</details>
+
 ## Downloads and support
 
 First public test version: **0.16.6**. Downloads are provided through [GitHub Releases](https://github.com/lipeihaoname-creator/chatgpt-pulse/releases/tag/v0.16.6).

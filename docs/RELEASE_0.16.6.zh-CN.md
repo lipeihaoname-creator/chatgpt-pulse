@@ -2,6 +2,12 @@
 
 一个读取本地 Work / Codex 日志的桌面监测工具，提供小型悬浮条和角色头像两种布局。Mac 与 Windows 使用统一的 0.16.6 共用代码；这是首个公开测试版本。
 
+## 实机演示
+
+[查看完整实机演示图集](https://github.com/lipeihaoname-creator/chatgpt-pulse/blob/main/docs/DEMOS.md)：头像互动、两名角色的表情与粒子、多任务分开／合并显示、主题配色与头像裁剪。均为 Mac 桌面应用实际采集，使用合成演示或隔离模拟日志，不代表真实模型速度。
+
+![Mac 实机头像点击互动 · 合成演示](https://raw.githubusercontent.com/lipeihaoname-creator/chatgpt-pulse/main/docs/media/avatar-interaction-macos.gif)
+
 ## 下载选择
 
 - Mac：`ChatGPT-Pulse-0.16.6-mac-universal.dmg`，打开后拖入 Applications；最低 macOS 13.3，包含 Apple Silicon 与 Intel。

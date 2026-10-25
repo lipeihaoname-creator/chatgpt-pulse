@@ -6,6 +6,31 @@ Mac / Windows 桌面上的 Work / Codex 工作监测与角色悬浮窗。读取�
 
 免费供个人及组织内部使用，源码公开；项目代码适用非商业基础许可与内部使用附加许可。本项目为非官方、非商业同人项目，与 OpenAI 及原作官方均无关联。
 
+## 实机演示
+
+以下为 **Mac 上运行的 0.16.6 桌面应用**，使用自带演示或隔离模拟日志。数字仅用于展示界面，不代表真实模型速度；没有使用真实聊天。更多画面及录制说明见 [实机演示图集](docs/DEMOS.md)。
+
+| 点击头像互动 · 实际悬浮窗 | 洛琪希表情与符文 · 应用内预览 |
+|---|---|
+| <img src="docs/media/avatar-interaction-macos.gif" alt="Mac 实机：点击麻衣头像出现逐字对话、表情与兔子粒子，数据为合成演示" width="420"> | <img src="docs/media/roxy-expressions-macos.gif" alt="Mac 桌面应用内预览：洛琪希的状态表情切换与符文粒子，合成数据" width="420"> |
+
+| 多个任务气泡 | 一个气泡分行显示 |
+|---|---|
+| <img src="docs/media/multitask-separate-macos.png" alt="Mac 实机：三个模拟任务共享一个头像，分别显示状态、昵称和活动脉冲" width="360"> | <img src="docs/media/multitask-combined-macos.png" alt="Mac 实机：三个模拟任务合并到同一个气泡，每项保留独立数据" width="360"> |
+
+<details>
+<summary>展开实时概览、个性化设置与六种主题</summary>
+
+![Mac 实机实时概览 · 合成演示](docs/media/overview-macos.png)
+
+![Mac 实机个性化设置 · 应用内预览](docs/media/personalization-mai-macos.png)
+
+![六种主题配色 · 由桌面应用内预览截图组成](docs/media/themes-macos.png)
+
+[查看完整图集：麻衣／洛琪希动效、并行任务、图片裁剪及录制说明](docs/DEMOS.md)
+
+</details>
+
 ## 功能
 
 - 自动发现并跟随兼容工作日志；多个任务共享一个头像，可选择多个气泡或合并显示。

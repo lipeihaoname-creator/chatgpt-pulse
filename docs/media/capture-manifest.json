@@ -1,0 +1,199 @@
+{
+  "version": "0.16.6",
+  "captured_on": "2026-10-25",
+  "platform": "macOS",
+  "os_version": "27.0.1",
+  "architecture": "arm64",
+  "application": "packaged Tauri desktop application",
+  "release_binary_sha256": "5dca0920d8dee49bf749496f44b38ba1df0b3da9f0c4f0f727012669a1e18611",
+  "capture_method": "Native application screenshots via Codex Computer Use; GIFs encoded from those captured frames",
+  "data": "Built-in synthetic demo or isolated numeric log fixtures; no real chats, credentials, account data or performance benchmarks",
+  "processing": "Crop, resize, contact sheet and GIF palette/encoding only; no AI-generated interface or retouched UI",
+  "windows_screenshots_included": false,
+  "files": [
+    {
+      "file": "overview-macos.png",
+      "kind": "native-screenshot",
+      "feature": "Built-in synthetic demo overview",
+      "pixels": [
+        1280,
+        895
+      ],
+      "crop": [
+        0,
+        64,
+        2320,
+        1686
+      ],
+      "bytes": 197910,
+      "sha256": "363363f0cd3d89c00e3a5dfa08edf8c2ed4d58cecb7ba8954fac400fdb9a6573"
+    },
+    {
+      "file": "personalization-mai-macos.png",
+      "kind": "native-screenshot",
+      "feature": "Mai and appearance settings",
+      "pixels": [
+        1280,
+        836
+      ],
+      "crop": [
+        0,
+        64,
+        2320,
+        1580
+      ],
+      "bytes": 177856,
+      "sha256": "ae19c83cbda3124680a52761390966e391860f598844cb6627c73c03dd69bbda"
+    },
+    {
+      "file": "personalization-roxy-macos.png",
+      "kind": "native-screenshot",
+      "feature": "Roxy and spellbook theme settings",
+      "pixels": [
+        1280,
+        836
+      ],
+      "crop": [
+        0,
+        64,
+        2320,
+        1580
+      ],
+      "bytes": 181064,
+      "sha256": "b65c5f7ce07179c6dafbb3ee848010dd20bd593a37358b0128c82e73245b37bb"
+    },
+    {
+      "file": "avatar-crop-macos.png",
+      "kind": "native-screenshot",
+      "feature": "Import one existing sprite frame and save crop",
+      "pixels": [
+        1280,
+        383
+      ],
+      "crop": [
+        540,
+        760,
+        2210,
+        1260
+      ],
+      "bytes": 165632,
+      "sha256": "c6477c6399f4d62870d304803851fdf55b141ddde1bb1f154516634262783fbe"
+    },
+    {
+      "file": "multitask-overview-macos.png",
+      "kind": "native-screenshot",
+      "feature": "Three isolated synthetic log tasks auto-discovered",
+      "pixels": [
+        1280,
+        825
+      ],
+      "crop": [
+        0,
+        64,
+        2320,
+        1560
+      ],
+      "bytes": 178771,
+      "sha256": "caf1166aa35adc5ccfa594e5c32ca4875a571ed3060912ae16977bc9d8c81ca2"
+    },
+    {
+      "file": "avatar-mai-macos.png",
+      "kind": "native-screenshot",
+      "feature": "Actual transparent avatar window",
+      "pixels": [
+        560,
+        256
+      ],
+      "crop": null,
+      "bytes": 83001,
+      "sha256": "8ac60c997f51823e5bf5b0884e65ad08d408905e58119f55abd7bcf1dbd74eb2"
+    },
+    {
+      "file": "multitask-separate-macos.png",
+      "kind": "native-screenshot",
+      "feature": "One portrait with separate task bubbles",
+      "pixels": [
+        544,
+        476
+      ],
+      "crop": null,
+      "bytes": 122838,
+      "sha256": "e720af59e0b652beb429975b99608cddf76c503f47c72acda836f6349c4bf061"
+    },
+    {
+      "file": "multitask-combined-macos.png",
+      "kind": "native-screenshot",
+      "feature": "One portrait with combined task rows",
+      "pixels": [
+        544,
+        484
+      ],
+      "crop": null,
+      "bytes": 122909,
+      "sha256": "96ddf082c4616bdf2c5cadfd589ad2f2a14d39ceca41c0561d8a861bfb674130"
+    },
+    {
+      "file": "avatar-interaction-macos.gif",
+      "kind": "native-animated-capture",
+      "feature": "Continuous real floating-window capture: click dialogue, expression and particles",
+      "pixels": [
+        560,
+        256
+      ],
+      "frames": 160,
+      "duration_ms": 4970,
+      "crop": null,
+      "bytes": 1339952,
+      "sha256": "d7d88a2218535b80bc2346de1088ec95b038f80873fcd997977e1ab03ebe2b8a"
+    },
+    {
+      "file": "mai-expressions-macos.gif",
+      "kind": "native-animated-capture",
+      "feature": "Native settings preview: shy, smile, pout, reasoning, output and complete; trimmed segments",
+      "pixels": [
+        560,
+        239
+      ],
+      "frames": 132,
+      "duration_ms": 6660,
+      "crop": [
+        1030,
+        635,
+        1720,
+        930
+      ],
+      "bytes": 1093426,
+      "sha256": "0bc666e3ac6a02a4acb6461a6b8dd008f0ae5786ac9bf6f1b92fc9fc9a4b2d69"
+    },
+    {
+      "file": "roxy-expressions-macos.gif",
+      "kind": "native-animated-capture",
+      "feature": "Native settings preview: reasoning, tool, shy, sleepy and complete; trimmed segments",
+      "pixels": [
+        560,
+        239
+      ],
+      "frames": 118,
+      "duration_ms": 5560,
+      "crop": [
+        1030,
+        635,
+        1720,
+        930
+      ],
+      "bytes": 955887,
+      "sha256": "0af11f4e3e15b68444c103897fb0dbf346f520a5d832e31b992511e40ca3704f"
+    },
+    {
+      "file": "themes-macos.png",
+      "kind": "native-screenshot-contact-sheet",
+      "feature": "Six actual theme selections in native settings",
+      "pixels": [
+        1160,
+        920
+      ],
+      "bytes": 366934,
+      "sha256": "bc17eb4d89827c3a2770340ed561b1d2518177e0288cf128d3ef4edd883b7c75"
+    }
+  ]
+}
