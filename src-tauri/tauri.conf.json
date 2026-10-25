@@ -1,0 +1,74 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "ChatGPT Pulse",
+  "version": "0.16.6",
+  "identifier": "io.github.chatgptpulse.desktop",
+  "build": {
+    "beforeDevCommand": "node node_modules/vite/bin/vite.js --host 127.0.0.1",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "node node_modules/vite/bin/vite.js build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "macOSPrivateApi": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "ChatGPT Pulse",
+        "width": 1160,
+        "height": 850,
+        "minWidth": 760,
+        "minHeight": 640,
+        "backgroundColor": "#101412",
+        "center": true,
+        "visible": false
+      },
+      {
+        "label": "overlay",
+        "title": "Pulse mini",
+        "url": "index.html?overlay",
+        "width": 390,
+        "height": 70,
+        "x": 40,
+        "y": 100,
+        "decorations": false,
+        "transparent": true,
+        "resizable": false,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "acceptFirstMouse": true,
+        "visible": false,
+        "focus": false,
+        "backgroundThrottling": "disabled",
+        "shadow": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' asset: data:; connect-src ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "app"
+    ],
+    "resources": {
+      "../THIRD_PARTY_NOTICES.txt": "THIRD_PARTY_NOTICES.txt",
+      "../docs/ASSETS.md": "ASSETS.md",
+      "../LICENSE": "LICENSE.txt",
+      "../licenses/": "licenses/",
+      "../docs/LICENSING.md": "LICENSING.md",
+      "../docs/DEPENDENCIES.md": "DEPENDENCIES.md"
+    },
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns"
+    ],
+    "macOS": {
+      "minimumSystemVersion": "13.3",
+      "signingIdentity": "-"
+    }
+  }
+}

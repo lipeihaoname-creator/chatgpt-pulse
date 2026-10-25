@@ -1,0 +1,37 @@
+[package]
+name = "chatgpt-pulse"
+version = "0.16.6"
+description = "Local-first Codex/Work log usage dashboard"
+edition = "2021"
+rust-version = "1.88"
+license-file = "../LICENSE"
+
+[lib]
+name = "chatgpt_pulse"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon", "macos-private-api", "image-png"] }
+tauri-plugin-global-shortcut = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "0.37", features = ["bundled"] }
+regex = "1"
+base64 = "0.23"
+time = { version = "0.3.55", features = ["parsing"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6.5"
+block2 = "0.6.2"
+objc2-foundation = { version = "0.3.2", default-features = false, features = ["std", "NSString", "NSArray", "NSRunLoop", "NSDate", "NSProcessInfo"] }
+objc2-app-kit = { version = "0.3.2", default-features = false, features = ["std", "NSRunningApplication", "NSEvent", "NSWindow", "libc", "block2"] }
+
+[profile.release]
+codegen-units = 1
+lto = true
+strip = true
+panic = "abort"
+opt-level = "s"

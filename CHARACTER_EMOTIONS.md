@@ -1,0 +1,24 @@
+# 空闲表情素材与角色调研 · 0.15.0
+
+2026-10-23。工具为内置 image_gen/imagegen，透明背景编辑模式；未使用 CLI、外部视觉识别服务或运行时生成 API。原始输出仅复制到工程，没有裁剪、重绘或覆盖旧图集。应用仍只读 Work 日志元数据，不读取聊天正文来生成台词。
+
+| 角色 | 工程资源 | 尺寸/布局 | 表情 |
+|---|---|---|---|
+| 麻衣 | `src/assets/mai/emotions-v1.png` | 1448×1086 RGBA / 4×3 | 害羞、忍笑、鼓脸、困倦 |
+| 洛琪希 | `src/assets/roxy/emotions-v1.png` | 1448×1086 RGBA / 4×3 | 害羞、忍笑、鼓脸、困倦 |
+
+列为四种表情，行为睁眼、半闭眼、闭眼。运行时仅将半闭/闭眼帧的眼部区域叠加在睁眼基底，避免生成图间发丝/肩线的细小差异形成抖动；没有改写 PNG。保留原有九种工作表情与其三张图集。图片是非官方同人表现，角色权利与项目代码许可分开；详见各角色资源目录 README。
+
+参考两位角色声优的表演解读和官方角色介绍（链接见 [IDLE_COMPANION.md](IDLE_COMPANION.md)）。麻衣采用克制关心、轻微调侃、先嘴硬后害羞；洛琪希采用成年教师的认真温和与偶尔迷糊。新台词是原创中文，不是原作语录或官方翻译。
+
+## 麻衣：最终提示词
+
+输入 1 为工程原 `src/assets/mai/open.png`，输入 2 为用户本轮提供的麻衣害羞参考 JPG。使用 `transparent_background=true`。
+
+Use case: identity-preserve. Asset type: aligned animation sprite atlas for a small desktop portrait. Create ONE clean transparent PNG sprite sheet, EXACTLY FOUR COLUMNS and THREE ROWS of equal SQUARE cells (overall aspect ratio 4:3). Reference image 1 is the EXISTING app portrait atlas: preserve its Mai Sakurajima identity, anime linework, long dark purple hair, purple eyes, crossed silver hairpins and pink rabbit hair clip, beige school blazer, white collared shirt and red tie. Reference image 2 ONLY guides the restrained shy blush and sidelong eyes, NOT its camera angle or composition. ALL TWELVE cells must use precisely the SAME frontal head and shoulders framing, hair silhouette, identical scale, head position and shoulder baseline as the first cell of reference 1. Do NOT tilt or move the head between cells; movements will be animated in software. Facial expression columns left to right: (1) visibly shy, pink blush with fine cheek hatch lines, gaze slightly averted, small hesitant closed mouth; (2) trying to hide a pleased smile, blushing lightly with a restrained wry smile and softened brows; (3) mild playful pout, slightly puffed cheeks, tiny pursed lips, not angry; (4) sleepy calm, softened eyebrows, relaxed small mouth and drowsy low eyelids. ROW ONE: each expression with eyes open (sleepy naturally half-lidded). ROW TWO: identical portraits/expressions with eyelids halfway between row one and closed. ROW THREE: identical portraits/expressions with eyes fully closed. Change only eyelids between rows. Four columns and three rows only; no additional portraits. Transparent backgrounds in all cells. Hair and clothing fully rendered, no frames, text, labels, watermark, circles, decorative props, hands, hats or logos. Leave a consistent tiny transparent gutter at cell edges, never bleed into neighboring cells. Match original anime cel shading, face colors, placement and silhouette so facial transitions do not jump. This is a nonsexual, fully clothed face-only companion illustration.
+
+## 洛琪希：最终提示词
+
+输入 1 为工程原 `src/assets/roxy/open.png`，输入 2 为用户本轮提供的洛琪希害羞参考 JPG。使用 `transparent_background=true`。
+
+Use case: identity-preserve. Asset type: aligned expression animation sprite atlas for a small desktop portrait. Create ONE clean transparent PNG sprite sheet, EXACTLY FOUR COLUMNS and THREE ROWS of equal SQUARE cells (overall aspect ratio exactly 4:3). Reference 1 is the existing app atlas of Roxy Migurdia: preserve her identity, mature reserved anime face, blue-purple hair, small loop ahoge, two braids, blue eyes, brown cloak with ivory piping and dark collar, ivory high neck shirt. NO HAT. Reference 2 ONLY guides the shy blush and restrained slightly pouty eyes, NOT its camera angle, nightclothes, background or watermark. ALL TWELVE cells must have precisely the SAME frontal head and shoulders framing, same hair silhouette and ahoge, identical scale, face position and shoulder baseline as first cell of reference 1. No head tilts or movements between cells; the software animates movement. Facial expression COLUMNS from left to right: (1) visibly embarrassed, rosy cheeks with fine hatch marks, shy averted gaze and tiny hesitant mouth; (2) quietly delighted but trying to remain teacher-like, soft restrained blushing smile and gentle brows; (3) mildly flustered playful pout, slightly puffed cheeks and tiny pursed mouth, not anger; (4) sleepy peaceful, low drowsy eyelids, relaxed mouth. ROW ONE: open eyes for each expression (sleepy eyes naturally half-lidded). ROW TWO: identical portraits and expressions with eyelids halfway to closed. ROW THREE: identical portraits and expressions with eyes fully closed. Only eyelids change between rows. Exactly four columns by three rows, nothing else. Render genuine transparent background in every cell. No labels, text, watermark, borders, circles, symbols, extra props, hands or hats. Leave a consistent tiny transparent gutter at cell edges and never bleed across cells. Preserve original anime cel shading, skin colors, hair silhouette, position, clothing, scale and camera angle for non-jumping transitions. These are nonsexual, fully clothed head/shoulders portraits of an adult anime magician.

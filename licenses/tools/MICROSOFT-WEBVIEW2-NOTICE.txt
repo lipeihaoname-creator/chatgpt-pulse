@@ -1,0 +1,8 @@
+Microsoft Edge WebView2 Runtime
+
+The offline Windows installer embeds the original, digitally signed Microsoft Evergreen Standalone Installer (x64), unmodified. The online variant embeds the Microsoft bootstrapper. These Microsoft components remain subject to Microsoft license terms and are not relicensed by this project.
+
+Official download: https://developer.microsoft.com/en-us/microsoft-edge/webview2/
+Deployment documentation: https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution
+
+The runtime installer is not included in the source archive. Build tools and user data are not included in either installer.

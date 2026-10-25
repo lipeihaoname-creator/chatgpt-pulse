@@ -1,0 +1,52 @@
+# ChatGPT Pulse Internal Use Additional Permission 1.0
+
+Effective for project versions 0.16.1 and later released with these terms.
+
+1. Additional permitted purpose
+
+In addition to the purposes permitted by the PolyForm Noncommercial License
+1.0.0, each licensor grants individuals and organizations permission to use,
+copy, install, run, and modify the covered software for their own internal
+activities, including internal business and professional work. This includes
+self-employed people and for-profit organizations. No per-user license fee is
+required by this permission.
+
+2. Meaning of internal use
+
+Internal use means use by an individual for their own activities, or by an
+organization's personnel and contractors solely for that organization's
+internal activities. An organization may deploy the software on its own
+systems, make internal modifications, and provide copies to those personnel
+and contractors for that purpose, subject to the notices required below.
+Contractors do not receive permission to offer the software itself as a
+commercial product or service to customers.
+
+Using the software to assist internal coding, design, research, or other work
+is permitted even when that work produces goods or services sold by the user.
+The sale of independently created work output is not, by itself, a sale or
+commercial distribution of this software.
+
+3. Limits of this additional permission
+
+This additional permission does not grant rights to sell, rent, charge for
+access to, or commercially redistribute the covered software or modified
+versions; to embed, bundle, or distribute it as part of a paid product or
+service; or to expose its functionality to customers as a paid hosted,
+managed, or subscription service. Removing its name, changing its appearance,
+or distributing it only in executable form does not expand this permission.
+A separate written grant from the relevant rights holders is needed for
+commercial exploitation outside the base license and this permission.
+
+4. Continuing conditions
+
+All other conditions of the PolyForm Noncommercial License 1.0.0, including
+notices, patent defense, violations, and no liability, continue to apply to
+rights exercised under this permission, with the permitted purpose expanded
+only as stated above. Recipients of copies must receive these additional
+terms together with the base license and all Required Notice lines.
+
+This document grants additional permissions only. It does not narrow rights
+under the base license, applicable law, third-party licenses, or a valid
+previous license. It does not license third-party character artwork,
+trademarks, or dependencies. Each licensor grants only rights that licensor
+has authority to grant.

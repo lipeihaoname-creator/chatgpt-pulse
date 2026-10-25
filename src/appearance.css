@@ -1,0 +1,105 @@
+/* Native hit testing in overlay.rs uses these exact logical dimensions. */
+.pet-monitor.mini{width:390px;height:70px;background:var(--pet-bg);color:var(--pet-ink);border-color:color-mix(in srgb,var(--pet-accent) 45%,var(--pet-bg));padding:8px 12px 8px 6px;gap:10px;overflow:hidden;--signal:var(--pet-accent)}
+.pet-monitor .mini-grip{width:36px;height:46px;min-width:36px;margin:0;background:none;border-radius:50%;color:var(--pet-accent)}.pet-monitor .mini-grip:hover{background:none}.pet-monitor:not(.avatar-layout) .mini-grip .character-portrait{width:36px;height:40px}
+.pet-monitor .pet-bubble{flex:1;min-width:0;position:relative}.pet-monitor .mini-content{width:100%;gap:8px;min-height:46px}.pet-monitor .mini-work{font-size:14px;color:var(--pet-ink)}.pet-status{display:flex;align-items:center;gap:7px;overflow:hidden;white-space:nowrap}.work-indicator{font-style:normal;color:var(--pet-accent);width:15px;flex-shrink:0;text-align:center}.work-indicator.working{animation:pet-turn 6s linear infinite}.pet-monitor[data-motion=spark] .work-indicator.working,.pet-monitor[data-motion=breath] .work-indicator.working{animation:pet-spark 2.5s ease-in-out infinite}.pet-monitor .mini-rate{min-width:85px}.pet-monitor .mini-rate b{color:var(--pet-ink);font-size:24px}.pet-monitor .mini-rate small,.pet-monitor .mini-work small{color:var(--pet-muted)}.pet-monitor .mini-rate.held b{color:var(--pet-accent)}.pet-monitor .mini-pulses{left:0;right:0;bottom:-3px}.pet-monitor .pulse-strip>span{background:color-mix(in srgb,var(--pet-accent) 14%,var(--pet-bg))}.pet-monitor .pulse-strip>span.lit{background:var(--pet-accent)}.pet-monitor .mini-edit-actions{flex-shrink:0}.pet-monitor.editing{display:flex;padding-right:8px;gap:7px}.pet-monitor.editing .mini-work{font-size:12px}.pet-monitor .mini-lock{background:var(--pet-accent);color:var(--pet-bg)}.pet-monitor .mini-cancel{background:var(--pet-bg);color:var(--pet-ink);border-color:var(--pet-muted)}
+.pet-monitor.avatar-layout{width:350px;height:128px;background:transparent!important;border:0!important;border-radius:0;overflow:visible;padding:8px 10px 8px 6px;gap:12px;align-items:center}.pet-monitor.avatar-layout .mini-grip{width:112px;height:112px;min-width:112px;border-radius:50%;padding:0}.pet-monitor.avatar-layout .pet-bubble{background:var(--pet-bg);border:1px solid color-mix(in srgb,var(--pet-accent) 45%,var(--pet-bg));border-radius:18px;padding:14px 12px;box-shadow:none;transition:opacity .22s;max-width:210px}.pet-monitor.avatar-layout .pet-bubble:before{content:'';position:absolute;left:-6px;top:30px;width:10px;height:10px;transform:rotate(45deg);background:var(--pet-bg);border-left:1px solid var(--pet-muted);border-bottom:1px solid var(--pet-muted)}.pet-monitor.avatar-layout .mini-content{display:block;min-height:42px}.pet-monitor.avatar-layout .mini-work{display:block;font-size:14px}.pet-monitor.avatar-layout .mini-rate{display:flex;align-items:baseline;gap:7px;text-align:left;margin-top:7px}.pet-monitor.avatar-layout .mini-rate b{font-size:24px}.pet-monitor.avatar-layout .mini-rate small{font-size:9px}.pet-monitor.avatar-layout .concealed{opacity:0;pointer-events:none}.pet-monitor.avatar-layout.editing{height:168px;padding-bottom:48px}.pet-monitor.avatar-layout .mini-edit-actions{position:absolute;top:128px;left:124px;right:10px;width:auto;flex-direction:row;justify-content:flex-end}.pet-monitor.avatar-layout .mini-edit-actions button{width:80px;padding:7px}.pet-error{position:absolute;left:0;right:0;bottom:0;background:#572e29;color:#ffe1d6;font-size:9px;padding:3px 8px}.appearance-preview{padding:24px 14px;background:radial-gradient(ellipse at top,#ffffff0b,transparent),#111713;border:1px solid #334239;border-radius:12px;min-height:150px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:22px 0 12px}.appearance-preview .mini{flex-shrink:0}.appearance-preview .mini-grip{cursor:default}.appearance-caption{color:#8ca190;font-size:10px;line-height:1.8}.theme-picker{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.theme-choice{border:1px solid #44524a;border-radius:8px;background:#202a24;padding:9px 11px;display:flex;gap:7px;align-items:center;font-size:10px}.theme-choice.selected{outline:1px solid #c0d6ca}.theme-choice i{width:13px;height:13px;border-radius:50%;border:1px solid #ffffff40}.appearance-control{display:flex;gap:8px;align-items:center;flex-shrink:0}.appearance-control select{max-width:165px}.appearance-upload{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}.appearance-states{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}.appearance-states button{padding:7px 9px;font-size:10px;background:#25362c;border:1px solid #405448;border-radius:6px}.appearance-states button.selected{color:#caf3da;border-color:#91c6a3}@keyframes pet-turn{to{transform:rotate(360deg)}}@keyframes pet-spark{50%{opacity:.4;transform:scale(.85)}}@media(prefers-reduced-motion:reduce){.pet-monitor .work-indicator{animation:none!important}.pet-monitor .pet-bubble{transition:none}}
+
+/* 0.7.1 compact layout; geometry is mirrored in overlay.rs. */
+.pet-monitor.mini{width:272px;height:64px;padding:7px 10px 7px 6px;gap:8px;border-radius:13px;align-items:center}
+.pet-monitor .pet-bubble{flex:1;min-width:0}.pet-monitor .mini-content{justify-content:flex-start;gap:9px;min-height:42px}
+.pet-monitor .mini-work{flex:0 1 auto;font-size:12px;min-width:0}.pet-status{gap:4px}.work-indicator{width:13px}
+.pet-monitor .mini-rate{min-width:0;display:flex;align-items:baseline;gap:4px;text-align:left}.pet-monitor .mini-rate b{font-size:21px}.pet-monitor .mini-rate small{font-size:8px;white-space:nowrap}.pet-monitor .mini-work small{font-size:8px}.pet-monitor .mini-pulses{bottom:-2px}
+.pet-monitor.editing{height:104px;padding-bottom:47px}.pet-monitor.editing .mini-edit-actions{position:absolute;top:67px;left:46px;right:10px;width:auto;flex-direction:row;justify-content:flex-end;gap:6px}.pet-monitor.editing .mini-edit-actions button{width:90px;padding:6px 4px}.pet-monitor.editing .mini-content{gap:9px}.pet-monitor.editing .mini-work{font-size:12px}.pet-monitor.editing .mini-rate{min-width:0}
+.pet-monitor.avatar-layout{width:280px;height:128px;padding:8px 10px 8px 6px;gap:8px;border-radius:0}.pet-monitor.avatar-layout .pet-bubble{max-width:144px;padding:10px 10px;border-radius:16px}.pet-monitor.avatar-layout .mini-work{font-size:12px}.pet-monitor.avatar-layout .mini-rate{margin-top:6px;gap:5px}.pet-monitor.avatar-layout .mini-rate b{font-size:22px}.pet-monitor.avatar-layout .mini-rate small{font-size:8px}.pet-monitor.avatar-layout .mini-content{min-height:40px}
+.pet-monitor.avatar-layout.editing{height:168px;padding-bottom:48px}.pet-monitor.avatar-layout.editing .mini-edit-actions{top:128px;left:126px;right:10px}.pet-monitor.avatar-layout.editing .mini-edit-actions button{width:64px;padding:7px 4px}
+.pet-dialogue{color:var(--pet-ink);max-width:100%}.dialogue-kind{display:block;font-size:8px;color:var(--pet-muted);line-height:11px;letter-spacing:.3px}.pet-dialogue p{font-size:11px;font-weight:450;line-height:15px;margin:3px 0 4px;min-height:30px;max-height:45px;overflow:hidden;overflow-wrap:anywhere}.pet-monitor.chatting .mini-content{min-height:13px;gap:6px}.pet-monitor.chatting .mini-work{font-size:9px}.pet-monitor.chatting .work-indicator{width:9px;font-size:10px}.pet-monitor.chatting .mini-rate b{font-size:11px;font-weight:450}.pet-monitor.chatting .mini-rate small{font-size:7px}.pet-monitor.chatting .mini-work small{display:none}.pet-monitor.chatting .mini-rate{gap:3px}
+.pet-monitor:not(.avatar-layout).chatting .dialogue-kind{display:none}.pet-monitor:not(.avatar-layout).chatting .pet-dialogue p{font-size:10px;line-height:13px;min-height:26px;max-height:26px;margin:0 0 2px}.pet-monitor:not(.avatar-layout).chatting .mini-content{min-height:12px}.pet-monitor:not(.avatar-layout).chatting .mini-rate b{font-size:10px}.pet-monitor:not(.avatar-layout).chatting .mini-pulses{bottom:-4px}
+.pet-monitor.avatar-layout.chatting .mini-content{display:flex;flex-wrap:wrap;gap:3px 6px}.pet-monitor.avatar-layout.chatting .mini-rate{margin-top:0}.typing-cursor.typing:after{content:'▏';color:var(--pet-accent);animation:pet-cursor .8s steps(2) infinite}.pet-dialogue{animation:pet-dialogue-in .18s ease-out}@keyframes pet-dialogue-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}@keyframes pet-hello{25%{transform:rotate(-2deg)}60%{transform:rotate(1deg)}to{transform:rotate(0)}}@keyframes pet-cursor{50%{opacity:0}}
+.pet-monitor[data-animations=false] .pet-dialogue,.pet-monitor[data-animations=false].chatting .mini-grip{animation:none}@media(prefers-reduced-motion:reduce){.pet-dialogue,.pet-monitor.chatting .mini-grip,.typing-cursor.typing:after{animation:none!important}}
+
+/* Docking keeps the avatar at the physical screen edge; the bubble opens inward. */
+.pet-monitor.avatar-layout.docked-right{flex-direction:row-reverse;padding-left:10px;padding-right:6px}
+.pet-monitor.avatar-layout.docked-right .pet-bubble:before{left:auto;right:-6px;transform:rotate(225deg)}
+.pet-monitor.avatar-layout.docked-right .mini-edit-actions{left:10px;right:126px}
+.pet-monitor.avatar-layout.collapsed .pet-bubble{opacity:0;pointer-events:none;transform:translateX(-8px)}
+.pet-monitor.avatar-layout.collapsed.faded{opacity:1}
+.pet-monitor.avatar-layout.docked-right.collapsed .pet-bubble{transform:translateX(8px)}
+.pet-monitor.avatar-layout .pet-bubble{transition:opacity .22s ease,transform .22s ease}
+
+.state-pack-control{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0 20px}
+.state-pack-control select{padding:8px;border:1px solid #455b4c;border-radius:6px;background:#1b2a20;color:#dce8df}
+.brand-icon.app-brand-icon{width:44px;height:44px;border:0;background:transparent;overflow:hidden}
+.app-brand-icon img{width:100%;height:100%;object-fit:contain}
+@keyframes pet-complete{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-3px) rotate(-2deg)}65%{transform:translateY(-1px) rotate(1deg)}}
+@media(prefers-reduced-motion:reduce){.pet-monitor.celebrating .mini-grip{animation:none!important}.pet-monitor.avatar-layout .pet-bubble{transition:none!important}}
+
+/* Only the main Work bubble has a character. Companions keep a drag handle. */
+.pet-monitor.bubble-only{width:232px;height:64px;padding-left:16px;gap:0;position:relative}
+.pet-monitor.bubble-only .mini-grip{position:absolute;left:0;top:8px;width:16px;height:48px;min-width:0;border-radius:5px;padding:0;font-size:11px;opacity:.55}
+.pet-monitor.bubble-only .mini-grip:hover{opacity:1}
+.pet-monitor.bubble-only.avatar-layout{width:192px;height:116px;padding:8px 8px 8px 16px}
+.pet-monitor.bubble-only.avatar-layout .pet-bubble{padding:12px 10px;max-width:none;width:100%}
+.pet-monitor.bubble-only.avatar-layout .mini-pulses{left:0;right:0;bottom:-5px}
+.pet-monitor.bubble-only.avatar-layout .mini-grip{height:100px;width:16px;min-width:0;border-radius:5px}
+.pet-monitor.bubble-only.avatar-layout .mini-edit-actions{top:116px;left:16px;right:8px}
+.pet-monitor.bubble-only.avatar-layout.editing{height:156px;padding-bottom:48px}
+.pet-monitor.bubble-only:not(.avatar-layout).editing{height:104px;padding-bottom:40px}
+
+/* One native surface: every task follows the avatar without a second window. */
+.pet-bubbles{flex:1;min-width:0}.pet-bubbles>.pet-bubble{width:100%}
+.pet-monitor.avatar-layout .pet-bubbles.concealed{opacity:0;pointer-events:none}
+.task-metrics{position:relative;min-width:0}
+.pet-monitor.multitask{height:100vh;align-items:flex-start;background:transparent!important;border:0!important;overflow:visible}
+.pet-monitor.multitask>.mini-grip{position:absolute;top:8px;left:6px}
+.pet-monitor.avatar-layout.multitask.docked-right>.mini-grip{left:auto;right:6px}
+.pet-monitor.multitask>.pet-bubbles{position:absolute;top:8px;left:50px;right:10px;display:flex;flex-direction:column;gap:8px;max-height:calc(100vh - 16px);overflow:auto;padding:0 0 5px;scrollbar-width:thin;scrollbar-color:var(--pet-muted) transparent}
+.pet-monitor.avatar-layout.multitask>.pet-bubbles{left:126px}
+.pet-monitor.avatar-layout.multitask.docked-right>.pet-bubbles{left:10px;right:126px}
+.pet-monitor.multitask .pet-bubble{flex-shrink:0;position:relative;background:var(--pet-bg);border:1px solid color-mix(in srgb,var(--pet-accent) 45%,var(--pet-bg));border-radius:13px;padding:5px 8px;box-shadow:none}
+.pet-monitor.avatar-layout.multitask .pet-bubble{padding:10px;min-height:76px}
+.pet-monitor.multitask .companion-bubble:before{display:none}
+.pet-monitor.multitask .task-metrics{min-height:40px}
+.pet-monitor.avatar-layout.multitask .task-metrics{min-height:54px}
+.pet-monitor.multitask .mini-pulses{bottom:-3px}
+.pet-monitor.multitask .mini-edit-actions{top:auto;bottom:8px}
+.pet-monitor.multitask.editing>.pet-bubbles{max-height:calc(100vh - 56px)}
+.pet-monitor.multitask.combined>.pet-bubbles{gap:0;padding:10px;background:var(--pet-bg);border:1px solid color-mix(in srgb,var(--pet-accent) 45%,var(--pet-bg));border-radius:16px;box-shadow:none}
+.pet-monitor.multitask.combined .pet-bubble{background:none;border:0;border-radius:0;box-shadow:none;padding:0;min-height:0;overflow:visible}
+.pet-monitor.multitask.combined .pet-bubble:before{display:none}
+.pet-monitor.multitask.combined .companion-bubble{border-top:1px solid color-mix(in srgb,var(--pet-muted) 25%,transparent);margin-top:9px;padding-top:9px}
+.pet-monitor.avatar-layout.multitask.combined .task-metrics{min-height:50px}
+.pet-monitor.multitask.combined .mini-pulses{bottom:-3px}
+.pet-monitor.avatar-layout.collapsed .pet-bubbles{opacity:0;pointer-events:none}
+.pet-monitor.multitask.chatting .pet-bubbles .companion-bubble .mini-content{min-height:40px;display:block}
+.pet-monitor.multitask.chatting .companion-bubble .mini-work{font-size:12px}
+.pet-monitor.multitask.chatting .companion-bubble .mini-rate b{font-size:22px}
+.pet-monitor.multitask.chatting .companion-bubble .mini-rate small{font-size:8px}
+.pet-monitor.avatar-layout.multitask.editing .mini-edit-actions,.pet-monitor.multitask.editing .mini-edit-actions{top:auto;bottom:8px}
+.pet-monitor.avatar-layout.multitask,.pet-monitor.multitask.editing{height:100vh;padding-bottom:0}
+
+.pet-monitor.multitask.chatting .pet-dialogue .dialogue-kind{display:none}
+.pet-monitor.multitask.chatting .pet-dialogue p{min-height:30px;max-height:30px}
+.task-tag{font-size:8px;line-height:1;flex-shrink:0}.task-nickname{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.task-name-editor{display:flex;gap:8px;align-items:center;margin-top:14px;font-size:11px}.task-name-editor label{display:flex;align-items:center;gap:8px}.task-name-editor input{width:150px;max-width:35vw;background:#202e24;color:#d9e9dc;border:1px solid #4b6553;border-radius:5px;padding:7px}.task-name-editor button{padding:7px;background:#304438;border-radius:5px}.session-rows i{font-style:normal}.session-rows button>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Slow drifting silhouettes replace the framed status badge. No hit region grows. */
+.status-accessory.particle-field{position:absolute;inset:0;width:112px;height:112px;pointer-events:none;color:var(--pet-accent);overflow:visible;contain:layout style}
+.pet-particle{position:absolute;left:0;top:0;width:var(--particle-size);height:calc(var(--particle-size)*1.25);offset-anchor:center;offset-rotate:0deg;opacity:0;animation:pet-particle-flight var(--flight) linear var(--phase) infinite;pointer-events:none}
+.pet-particle svg{display:block;width:100%;height:100%;transform:rotate(var(--tilt))}
+@keyframes pet-particle-flight{0%{offset-distance:0%;opacity:0;transform:scale(.65)}18%{opacity:.65}55%{opacity:.8;transform:scale(1)}84%{opacity:.35}100%{offset-distance:100%;opacity:0;transform:scale(.5)}}
+.pet-face:has(.particle-field)>.pet-orbit{display:none}
+.pet-monitor:not(.avatar-layout):not(.multitask) .mini-grip{position:relative}
+.pet-monitor:not(.avatar-layout) .status-accessory.particle-field{left:0;top:4px;transform:scale(.34);transform-origin:top left}
+.pet-monitor:not(.avatar-layout) .pet-particle{width:18px;height:22px}
+.pet-monitor:not(.avatar-layout) .pet-particle:nth-child(n+4){display:none}
+@media(prefers-reduced-motion:reduce){.status-accessory.particle-field{display:none}.pet-particle{animation:none}}
+
+/* Flat edges prevent translucent halos on light desktops. */
+.pet-monitor.avatar-layout .pet-bubble,.pet-monitor.multitask .pet-bubble,.pet-monitor.multitask.combined>.pet-bubbles{box-shadow:none;border-color:transparent}
+.status-accessory.particle-field{color:color-mix(in srgb,var(--pet-accent) 75%,var(--pet-bg))}
+
+/* Native grip detection can lead or lag WebKit :hover. Both must stay clear. */
+.pet-monitor .mini-grip,.pet-monitor.grip-active .mini-grip,.pet-monitor .mini-grip:hover,.pet-monitor .mini-grip:active{background:transparent;color:var(--pet-accent)}
+.pet-monitor .mini-grip:focus:not(:focus-visible){outline:0;box-shadow:none}
+.pet-monitor .mini-grip:focus-visible{outline:2px solid #d8dcdf;outline-offset:-2px}
+
+.source-status{display:flex;flex-direction:column;gap:6px;padding:13px 16px;margin-bottom:18px;border:1px solid #796540;border-radius:8px;background:#302b20;color:#e0d4b7;font-size:12px;line-height:1.6}.source-status small{color:#b9ac8e}

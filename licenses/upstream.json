@@ -1,0 +1,15 @@
+{
+  "url": "https://polyformproject.org/licenses/noncommercial/1.0.0.txt",
+  "sha256": "ffcca38841adb694b6f380647e15f17c446a4d1656fed51a1e2041d064c94cc8",
+  "retrieved": "2026-10-23",
+  "modified": false,
+  "third_party": [
+    {
+      "file": "third-party/MPL-2.0.txt",
+      "source": "Unmodified cssparser 0.37.0 crate LICENSE",
+      "reference": "https://www.mozilla.org/en-US/MPL/2.0/",
+      "sha256": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85",
+      "modified": false
+    }
+  ]
+}
