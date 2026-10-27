@@ -10,12 +10,12 @@
 
 ## 下载选择
 
-- Mac：`ChatGPT-Pulse-0.16.6-mac-universal.dmg`，打开后拖入 Applications；最低 macOS 13.3，包含 Apple Silicon 与 Intel。
-- Windows x64：默认 `ChatGPT-Pulse-0.16.6-windows-x64-setup.exe`，含 WebView2 安装组件的完整离线版。
-- Windows x64 小体积版本：`ChatGPT-Pulse-0.16.6-windows-x64-online-setup.exe`，缺少 WebView2 时需联网。
-- 源码：`ChatGPT-Pulse-0.16.6-source.zip`。各附件校验见 `SHA256SUMS`。
+- Mac：[`ChatGPT-Pulse-0.16.6-mac-universal.dmg`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/ChatGPT-Pulse-0.16.6-mac-universal.dmg)，打开后拖入 Applications；最低 macOS 13.3，包含 Apple Silicon 与 Intel。
+- Windows x64：默认 [`ChatGPT-Pulse-0.16.6-windows-x64-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/ChatGPT-Pulse-0.16.6-windows-x64-setup.exe)，含 WebView2 安装组件的完整离线版。
+- Windows x64 小体积版本：[`ChatGPT-Pulse-0.16.6-windows-x64-online-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/ChatGPT-Pulse-0.16.6-windows-x64-online-setup.exe)，缺少 WebView2 时需联网。
+- 源码：[`ChatGPT-Pulse-0.16.6-source.zip`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/ChatGPT-Pulse-0.16.6-source.zip)。各附件校验见 [`SHA256SUMS`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/SHA256SUMS)。
 
-两个 Windows 包共用同一程序，任选一个。安装后不需要 Node、Rust、Python 或开发服务器。离线安装不表示 Work 本身可以脱网工作。
+两个 Windows 包共用同一程序，任选一个。安装后不需要 Node、Rust、Python 或开发服务器。离线安装不表示 Work 本身可以脱网工作。安装、升级与 PowerShell 校验步骤见 [Windows 使用说明](https://github.com/voidlph-dev/chatgpt-pulse/blob/main/docs/WINDOWS_INSTALL.md#下载与校验)。
 
 ## 这一版
 

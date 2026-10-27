@@ -4,7 +4,7 @@
 
 清单：licenses/windows-dependency-inventory.json；通知：THIRD_PARTY_NOTICES.txt。原 Mac 清单保留，并链接此平台清单。前端 svelte 与 @tauri-apps/api 仍保留原许可。
 
-项目仍采用 PolyForm Noncommercial 1.0.0 + 内部使用附加许可。第三方依赖保持自己的许可，角色素材公开分发权仍待复核；本轮只做私人测试。
+项目仍采用 PolyForm Noncommercial 1.0.0 + 内部使用附加许可。第三方依赖保持自己的许可，角色素材公开分发权仍待复核；0.16.6 已公开预发布，安装验证范围见 [Windows 验收记录](WINDOWS_ACCEPTANCE.md)。
 
 5 份 MPL 原始 .crate 源码归档已逐项按 Cargo.lock 核验 SHA-256，并随 licenses/mpl-sources 提供；没有修改依赖源码。
 

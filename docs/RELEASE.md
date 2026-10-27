@@ -1,6 +1,6 @@
 # 0.16.6 交付与发布清单
 
-2026-10-25。Mac / Windows 已统一为 0.16.6 首个公开测试版本。维护者已决定保留现有角色发布；仓库、标签和 Release 的实际状态以 GitHub 为准。
+2026-10-25。Mac / Windows 已统一为 0.16.6 首个公开测试版本。维护者已决定保留现有角色发布；[v0.16.6](https://github.com/voidlph-dev/chatgpt-pulse/releases/tag/v0.16.6) 已于 2026-10-25 公开预发布。
 
 ## 附件
 
@@ -12,7 +12,9 @@
 | Windows 联网 | ChatGPT-Pulse-0.16.6-windows-x64-online-setup.exe | 原样保留的小体积安装器 |
 | 源码 | ChatGPT-Pulse-0.16.6-source.zip | 统一白名单源码，含两平台配置和完整许可 |
 
-所有最终附件列入 SHA256SUMS。Windows EXE 与原交接清单核对后原样使用，未在 Mac 上修改、改版本或冒充重新构建。
+所有最终附件列入 [SHA256SUMS](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/SHA256SUMS)。Windows EXE 与原交接清单核对后原样使用，未在 Mac 上修改、改版本或冒充重新构建。
+
+2026-10-27 下载复核：两个 Windows EXE 均完成公开地址的整包下载，实际大小及 SHA-256 与 Release API、SHA256SUMS 一致。后续可按 [贡献与验证](../CONTRIBUTING.md) 手动运行 `scripts/verify-downloads.py` 复核；不表示干净 Windows 安装验收已通过。
 
 ## 已执行
 
@@ -30,6 +32,6 @@
 
 代码沿用 PolyForm Noncommercial 加内部使用附加许可，属于源码公开；不能自行改 MIT 或标为 OSI 开源。第三方条款、MPL 源码及旧版本已有有效许可继续保留。
 
-Mac 使用临时签名且未公证，Windows 未签名。本阶段不购买服务，不要求关闭系统安全功能。自动更新未实现，GitHub CI 已配置但未远程执行；工作流只有读取仓库与上传构建产物权限，没有自动发布。
+Mac 使用临时签名且未公证，Windows 未签名。本阶段不购买服务，不要求关闭系统安全功能。自动更新未实现，GitHub CI 已远程执行，历史结果及当前修复见 [发行准备](RELEASE_READINESS.md)；工作流只有读取仓库与上传构建产物权限，没有自动发布。
 
 其他设备、Intel 实机、Windows 10、Windows ARM64、缺失 WebView2 的干净环境仍待按各平台清单验收。没有兼容本地日志的云端 Work、普通聊天和浏览器聊天不支持。

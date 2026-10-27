@@ -35,9 +35,11 @@ First public test version: **0.16.6**. Downloads are provided through [GitHub Re
 
 | Platform | Package | Verification scope |
 |---|---|---|
-| macOS 13.3+ | `ChatGPT-Pulse-0.16.6-mac-universal.dmg` | Universal Apple Silicon / Intel binary; see [Mac acceptance](docs/MAC_ACCEPTANCE.md) for actual tests |
-| Windows x64 | `ChatGPT-Pulse-0.16.6-windows-x64-setup.exe` | Offline installer including WebView2 setup; tested on the handoff machine only |
-| Windows x64, online | `ChatGPT-Pulse-0.16.6-windows-x64-online-setup.exe` | Smaller alternative; internet needed for missing WebView2 |
+| macOS 13.3+ | [`ChatGPT-Pulse-0.16.6-mac-universal.dmg`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/ChatGPT-Pulse-0.16.6-mac-universal.dmg) | Universal Apple Silicon / Intel binary; see [Mac acceptance](docs/MAC_ACCEPTANCE.md) for actual tests |
+| Windows x64 | [`ChatGPT-Pulse-0.16.6-windows-x64-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/ChatGPT-Pulse-0.16.6-windows-x64-setup.exe) | Offline installer including WebView2 setup; tested on the handoff machine only |
+| Windows x64, online | [`ChatGPT-Pulse-0.16.6-windows-x64-online-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/ChatGPT-Pulse-0.16.6-windows-x64-online-setup.exe) | Smaller alternative; internet needed for missing WebView2 |
+
+Checksums: [SHA256SUMS](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/SHA256SUMS). See the [Windows verification steps](docs/WINDOWS_INSTALL.md#下载与校验).
 
 On macOS, open the DMG and drag the app to Applications. On Windows, install one of the two EXEs. End users do not need Node.js, Rust, Python or a development server. The Mac candidate is ad hoc signed and not notarized; Windows installers are unsigned. Check [Mac installation](docs/MAC_INSTALL.md) or [Windows installation](docs/WINDOWS_INSTALL.md) before testing.
 

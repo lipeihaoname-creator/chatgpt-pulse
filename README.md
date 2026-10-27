@@ -44,22 +44,22 @@ Mac / Windows 桌面上的 Work / Codex 工作监测与角色悬浮窗。读取�
 
 | 下载文件 | 用途 |
 |---|---|
-| `ChatGPT-Pulse-0.16.6-mac-universal.dmg` | Mac 安装盘，打开后将应用拖到 Applications；包含 Apple Silicon 与 Intel，最低 macOS 13.3 |
-| `ChatGPT-Pulse-0.16.6-windows-x64-setup.exe` | Windows 默认完整离线安装器，包含微软 WebView2 安装组件 |
-| `ChatGPT-Pulse-0.16.6-windows-x64-online-setup.exe` | Windows 小体积联网版，缺少 WebView2 时需联网下载 |
-| `ChatGPT-Pulse-0.16.6-source.zip` | 两平台统一源码，不含开发工具、个人日志和数据库 |
+| [`ChatGPT-Pulse-0.16.6-mac-universal.dmg`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/ChatGPT-Pulse-0.16.6-mac-universal.dmg) | Mac 安装盘，打开后将应用拖到 Applications；包含 Apple Silicon 与 Intel，最低 macOS 13.3 |
+| [`ChatGPT-Pulse-0.16.6-windows-x64-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/ChatGPT-Pulse-0.16.6-windows-x64-setup.exe) | Windows 默认完整离线安装器，包含微软 WebView2 安装组件 |
+| [`ChatGPT-Pulse-0.16.6-windows-x64-online-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/ChatGPT-Pulse-0.16.6-windows-x64-online-setup.exe) | Windows 小体积联网版，缺少 WebView2 时需联网下载 |
+| [`ChatGPT-Pulse-0.16.6-source.zip`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/ChatGPT-Pulse-0.16.6-source.zip) | 两平台统一源码，不含开发工具、个人日志和数据库 |
 
-使用者无需 Node、Rust、Python 或开发服务器。Mac 步骤见 [Mac 安装说明](docs/MAC_INSTALL.md)，Windows 两个安装器任选其一，见 [Windows 使用说明](docs/WINDOWS_INSTALL.md)。下载后可按随包 `SHA256SUMS` 核对文件。
+使用者无需 Node、Rust、Python 或开发服务器。Mac 步骤见 [Mac 安装说明](docs/MAC_INSTALL.md)，Windows 两个安装器任选其一，见 [Windows 使用说明](docs/WINDOWS_INSTALL.md)。Windows EXE 未签名，可能出现发布者未知提示；无需关闭系统安全功能。下载后可按 [`SHA256SUMS`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/SHA256SUMS) 核对文件；PowerShell 步骤见 [Windows 下载校验](docs/WINDOWS_INSTALL.md#下载与校验)。
 
 默认读取当前用户的 `~/.codex/sessions`。若客户端配置了自定义位置，Pulse 进程可通过绝对路径环境变量 `CODEX_HOME` 指向该目录。普通 ChatGPT 聊天、浏览器聊天和不生成兼容本地日志的客户端不在支持范围内。无需为本应用授予辅助功能、屏幕录制或全磁盘访问权限。
 
-悬浮窗右键打开菜单，或用 `⌘⌃⌥P` 编辑；点击头像互动，按住拖动，编辑后可完成或取消。在设置里可选择“随 GPT 启动”。关闭主窗口仍在后台运行；退出可用菜单栏菜单或 `⌘Q`。
+悬浮窗右键打开菜单；Mac 用 `⌘⌃⌥P`、Windows 用 `Ctrl+Alt+Shift+P` 编辑，也可在主窗口点击“编辑悬浮条”。点击头像互动，按住拖动，编辑后可完成或取消。在设置里可选择“随 GPT 启动”。关闭主窗口仍在后台运行；Mac 从菜单栏菜单或用 `⌘Q` 退出，Windows 从系统托盘菜单退出。
 
 | 平台 | 当前状态 |
 |---|---|
 | Apple Silicon Mac | 0.16.6 本机验收范围见 [Mac 验收说明](docs/MAC_ACCEPTANCE.md) |
 | Intel Mac | 已生成通用二进制中的 Intel 架构；尚无 Intel 实机验收 |
-| Windows x64 | 0.16.6 本机验收；Windows 10/其他机器仍待验证，见随包 Windows 验收报告 |
+| Windows x64 | 0.16.6 本机验收；Windows 10/其他机器仍待验证，见 [Windows 验收报告](docs/WINDOWS_ACCEPTANCE.md) |
 | Chrome / 普通聊天 | 暂不支持 |
 
 候选 Mac 包使用临时签名，尚未完成 Apple Developer ID 签名与公证。本阶段不购买签名或公证服务，提供明确标注未公证的测试包；其他 Mac 下载后可能出现系统安全提示，仍需异机测试，参见 [发布清单](docs/RELEASE.md)。不能保证所有系统版本、日志格式或电脑都可用。
