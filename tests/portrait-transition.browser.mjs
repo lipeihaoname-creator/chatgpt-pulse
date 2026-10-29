@@ -15,7 +15,10 @@ try{
     window.observeFace=new MutationObserver(()=>window.faceSamples.push({count:el.querySelectorAll('.expression-frame').length,key:el.querySelector('.expression-frame')?.dataset.renderedExpression,eye:el.dataset.swapEye,phase:el.dataset.swapPhase}));
     window.observeFace.observe(el,{attributes:true,childList:true,subtree:true});
    });
-   await page.getByRole('button',{name:label,exact:true}).click();await page.waitForTimeout(480);
+   await page.getByRole('button',{name:label,exact:true}).click();
+   // Coalescing may wait for the newly shown face's 350 ms dwell before
+   // its 380 ms bridge. Observe completion, not an assumed wall-clock frame.
+   await page.waitForFunction(expected=>{const el=document.querySelector('[aria-label="外观预览"] .character-portrait');return el?.dataset.swapPhase===''&&el.querySelector('.expression-frame')?.dataset.renderedExpression===expected;},expected,{timeout:3000});
    const transition=await portrait.evaluate(el=>({samples:window.faceSamples,persistent:window.pose===el.querySelector('.pose')&&window.breath===el.querySelector('.breath')&&window.breathAnimation===window.breath.getAnimations()[0]}));
    assert.ok(transition.samples.every(s=>s.count===1),JSON.stringify(transition));
    assert.ok(transition.samples.some(s=>s.phase==='closing'&&s.key===before),JSON.stringify(transition));

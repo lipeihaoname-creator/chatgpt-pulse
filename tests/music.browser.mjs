@@ -21,17 +21,20 @@ try{
  assert.equal(await page.locator('.music-spectrum line').count(),24);
  assert.equal(await page.locator('.mini-grip .character-portrait').count(),1);
  checks.push('Isolated synthetic audio drives only the existing portrait additive layer and 24 spectrum bars');
- await page.evaluate(()=>{clearInterval(window.audioTimer);window.audio({bars:Array(24).fill(0)});});await page.waitForTimeout(180);
- const interpolation=await page.evaluate(async()=>{
-  window.audio({bars:Array(24).fill(1)});const values=[];
-  const started=performance.now();
-  // Sample elapsed time, not an assumed display refresh rate (60/120/144 Hz).
-  while(performance.now()-started<220){await new Promise(requestAnimationFrame);values.push(Number(document.querySelector('[data-band="0"]').getAttribute('y2')));}
-  return values;
- });
+ // Drive the actual DOM animation on a deterministic rAF clock: CI can
+ // deliver only two real display frames in 220 ms under host contention.
+ const interpolationContext=await browser.newContext({viewport:{width:280,height:144}});
+ await interpolationContext.clock.install();await interpolationContext.addInitScript(initialize,initial);
+ const interpolationPage=await interpolationContext.newPage();
+ await interpolationPage.goto('http://127.0.0.1:1420/?overlay',{waitUntil:'networkidle'});
+ await interpolationPage.waitForFunction(()=>document.querySelector('.music-pose')?.dataset.musicMoving==='true');
+ await interpolationPage.clock.pauseAt(new Date(Date.now()+1000));
+ await interpolationPage.evaluate(()=>{clearInterval(window.audioTimer);window.audio({bars:Array(24).fill(0)});});await interpolationPage.clock.runFor(180);
+ await interpolationPage.evaluate(()=>window.audio({bars:Array(24).fill(1)}));const interpolation=[];
+ for(let i=0;i<12;i++){await interpolationPage.clock.runFor(16);interpolation.push(await interpolationPage.locator('[data-band="0"]').evaluate(el=>Number(el.getAttribute('y2'))));}
+ await interpolationContext.close();await page.bringToFront();
  assert.ok(new Set(interpolation).size>=4,JSON.stringify(interpolation));
  assert.ok(interpolation.slice(1).every((v,i)=>v<=interpolation[i]+.01),JSON.stringify(interpolation));
- await page.evaluate(()=>window.audioTimer=setInterval(()=>window.audio(),100));
  checks.push('A single audio packet produces several monotonic visual frames instead of a stepped jump');
  const geometry=await page.evaluate(()=>{const a=document.querySelector('.pet-image').getBoundingClientRect(),s=document.querySelector('.music-spectrum').getBoundingClientRect(),tops=[...document.querySelectorAll('[data-band]')].map(e=>e.getBoundingClientRect().top);return {gap:Math.min(...tops)-a.bottom,right:s.right,bottom:s.bottom,pointer:getComputedStyle(document.querySelector('.music-spectrum')).pointerEvents};});
  assert.ok(geometry.gap>=1&&geometry.gap<18,JSON.stringify(geometry));assert.ok(geometry.bottom<=144);assert.equal(geometry.pointer,'none');
