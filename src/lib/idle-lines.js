@@ -1,3 +1,4 @@
+import {musicExchanges} from './music-lines.js';
 // Original Chinese exchanges inspired by the official character/cast material.
 // These are local dialogue, not quotations from the original scripts.
 export const idleExchanges={
@@ -97,5 +98,7 @@ for(const role of ['mai','roxy']){
 export function exchangeDeck(random=Math.random){
  const bags=new Map(),last=new Map();
  const draw=()=>{const n=random();return Number.isFinite(n)?Math.min(.999999,Math.max(0,n)):0;};
- return {next(character){const pool=idleExchanges[character];if(!pool)return null;let bag=bags.get(character)||[];if(!bag.length){bag=pool.map((_,i)=>i);for(let i=bag.length-1;i>0;i--){const j=Math.floor(draw()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}if(bag.at(-1)===last.get(character))bag.unshift(bag.pop());}const id=bag.pop();bags.set(character,bag);last.set(character,id);return {id,lines:pool[id],moods:exchangeMoods[character][id]};}};
+ return {next(character,{music=false,preferMusic=false}={}){
+ if(music&&musicExchanges[character]&&(preferMusic||draw()<.65)){const key=character+':music';let bag=bags.get(key)||[];if(!bag.length){bag=musicExchanges[character].map((_,i)=>i);for(let i=bag.length-1;i>0;i--){const j=Math.floor(draw()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}if(bag.at(-1)===last.get(key))bag.unshift(bag.pop());}const id=bag.pop();bags.set(key,bag);last.set(key,id);return {...musicExchanges[character][id],id:key+id,music:true};}
+ const pool=idleExchanges[character];if(!pool)return null;let bag=bags.get(character)||[];if(!bag.length){bag=pool.map((_,i)=>i);for(let i=bag.length-1;i>0;i--){const j=Math.floor(draw()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}if(bag.at(-1)===last.get(character))bag.unshift(bag.pop());}const id=bag.pop();bags.set(character,bag);last.set(character,id);return {id,lines:pool[id],moods:exchangeMoods[character][id]};}};
 }

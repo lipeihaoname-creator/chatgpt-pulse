@@ -16,7 +16,7 @@ PUBLIC_DOCS = [
     'DEPENDENCIES.md', 'LICENSING.md', 'RELEASE.md', 'WINDOWS_DEPENDENCIES.md',
     'WINDOWS_INSTALL.md', 'WINDOWS_BUILD.md', 'WINDOWS_ACCEPTANCE.md',
     'RELEASE_READINESS.md', 'MAC_INSTALL.md', 'MAC_ACCEPTANCE.md',
-    'RELEASE_0.16.6.zh-CN.md', 'DEMOS.md',
+    'RELEASE_0.16.6.zh-CN.md', 'DEMOS.md', 'MUSIC_REACTIVE.md', 'SPECTRUM_STUDIO.md', 'WINDOWS_MUSIC_WORK_PROMPT.md', 'WINDOWS_MUSIC_REPORT.md', 'RELEASE_0.18.2.zh-CN.md', 'MAC_MERGE_REPORT.md', 'GITHUB_RELEASE_DRAFT.zh-CN.md', 'MAC_REVIEW_20261029.md',
 ]
 BLOCKED = {'.tools', 'node_modules', 'target', 'dist', 'release', 'test-results',
            '.git', '.codex', '.agents', '.aws', '__pycache__', '.venv', 'design'}
@@ -36,9 +36,9 @@ def selected_sources(root):
         'windows-cloud-source-probe.mjs', 'package-windows-test-kit.py',
     }]
     for name in ['Cargo.toml', 'Cargo.lock', 'build.rs', 'tauri.conf.json',
-                 'tauri.macos.conf.json', 'tauri.windows.conf.json', 'tauri.windows-offline.conf.json']:
+                 'Info.plist', 'tauri.macos.conf.json', 'tauri.windows.conf.json', 'tauri.windows-offline.conf.json']:
         files.append(root / 'src-tauri' / name)
-    for folder in ['src', 'icons', 'capabilities']:
+    for folder in ['src', 'native', 'icons', 'capabilities']:
         files += [p for p in (root / 'src-tauri' / folder).rglob('*') if p.is_file()]
     selected = []
     for p in sorted(set(files)):

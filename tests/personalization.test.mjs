@@ -18,11 +18,12 @@ test('state pack overrides only assigned states and respects disable/minimal cho
  assert.equal(portraitAsset({...settings,state_avatars_enabled:false},null,pack,'reasoning').image,null);
  assert.equal(portraitAsset({...settings,character:'none'},null,pack,'reasoning').image,null);
 });
-test('idle docking never hides active, uncertain or attention states, and hover restores the bubble',()=>{
+test('idle docking never hides active, uncertain or attention states, and hover alone does not expand it',()=>{
  const view={docked:true,elapsed:16000};
  assert.equal(shouldCollapse(defaults,{key:'waiting'},view),true);
+ assert.equal(shouldCollapse(defaults,{key:'waiting'},{...view,gripActive:true}),true);
  for(const key of ['reasoning','tool','quiet','unknown','waiting_user','waiting_approval','disconnected'])assert.equal(shouldCollapse(defaults,{key},view),false,key);
- for(const block of [{gripActive:true},{dragging:true},{talking:true},{locked:false},{docked:false},{elapsed:14000}])assert.equal(shouldCollapse(defaults,{key:'completed'},{...view,...block}),false);
+ for(const block of [{dragging:true},{talking:true},{locked:false},{docked:false},{elapsed:14000}])assert.equal(shouldCollapse(defaults,{key:'completed'},{...view,...block}),false);
 });
 test('completion celebrates only fresh matched natural completion once, and never replays after unmuting',()=>{
  const now=100000,sample={state:'completed',checked_at:now,completion:{id:'turn-1',reason:'completed',ended_at:now}};

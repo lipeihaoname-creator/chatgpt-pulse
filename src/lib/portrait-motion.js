@@ -1,6 +1,43 @@
 // Movement is independent of the painted expression and continuous breathing.
 // Every gesture ends at neutral; an interruption starts at the current matrix.
+import {systemAudio,currentAudio} from './music.js';
+import {MusicPoseAnimation,musicSurfaceVisible,musicPoseEligible} from './music-animation.js';
 export const neutralPose='translate(0px, 0px) rotate(0deg) scale(1)';
+
+// A lower-priority additive layer, below the existing gesture and breath layers.
+// One continuous inertial pose; beats change the target, never restart a clip.
+export function musicMotion(node,options={}){
+ let config=options,raf=0,timer=0,last=0,disposed=false,lastTransform='',debugAt=0;
+ const pose=new MusicPoseAnimation();
+ function debug(){
+  if(!config.debug)return;const a=currentAudio(),now=Date.now();
+  if(now-debugAt<300)return;debugAt=now;
+  node.dataset.musicDebug=JSON.stringify({enabled:!!config.enabled,status:a.status,stable:a.stable_seconds,age:now-a.at,visible:document.visibilityState,pose:[pose.x,pose.y,pose.angle]});
+ }
+ function paint(){
+  debug();
+  const transform=pose.settling?`translate(${pose.x.toFixed(3)}px, ${pose.y.toFixed(3)}px) rotate(${pose.angle.toFixed(3)}deg)`:'none';
+  if(transform!==lastTransform){node.style.transform=transform;lastTransform=transform;}
+  const moving=pose.allowed?'true':'false';if(node.dataset.musicMoving!==moving)node.dataset.musicMoving=moving;
+ }
+ const visible=()=>musicSurfaceVisible(currentAudio(),document.visibilityState!=='hidden');
+ function cancel(){cancelAnimationFrame(raf);clearTimeout(timer);raf=timer=0;}
+ function schedule(){if(document.visibilityState==='hidden')timer=setTimeout(()=>frame(performance.now()),16);else raf=requestAnimationFrame(frame);}
+ function frame(now){
+  raf=timer=0;if(disposed)return;
+  if(!visible()){pose.reset();paint();last=0;return;}
+  const elapsed=last?now-last:16.667;
+  if(elapsed<15){schedule();return;}
+  last=now;
+  pose.step(currentAudio(),config,Math.min(.05,elapsed/1000),Date.now());paint();
+  if(pose.settling)schedule();else last=0;
+ }
+ const wake=()=>{if(disposed)return;if(!visible()){cancel();last=0;pose.reset();paint();return;}if(!raf&&!timer&&(pose.settling||musicPoseEligible(currentAudio(),config)))schedule();};
+ const off=systemAudio.subscribe(wake);
+ const visibility=()=>{cancel();last=0;if(!visible()){pose.reset();paint();}else wake();};
+ document.addEventListener('visibilitychange',visibility);paint();
+ return {update(next){config=next||{};debug();wake();},destroy(){disposed=true;cancel();off();document.removeEventListener('visibilitychange',visibility);node.style.transform='none';}};
+}
 export function portraitGesture(kind,character='mai'){
  const strength=character==='roxy'?1:.85;
  // Keep apparent head size fixed. Expression registration handles framing;

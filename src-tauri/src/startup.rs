@@ -84,7 +84,7 @@ fn plist(exe: &str) -> String {
 <key>ProgramArguments</key><array><string>{}</string><string>--watch-client</string></array>
 <key>RunAtLoad</key><true/><key>KeepAlive</key><true/><key>ThrottleInterval</key><integer>10</integer>
 <key>ProcessType</key><string>Background</string><key>LimitLoadToSessionType</key><string>Aqua</string>
-<key>AssociatedBundleIdentifiers</key><array><string>io.github.chatgptpulse.desktop</string></array>
+<key>AssociatedBundleIdentifiers</key><array><string>io.github.chatgptpulse.desktop</string><string>io.github.chatgptpulse.musicpreview</string></array>
 <key>StandardOutPath</key><string>/dev/null</string><key>StandardErrorPath</key><string>/dev/null</string>
 </dict></plist>"#,
         xml(exe)
@@ -148,6 +148,12 @@ fn running(id: &str) -> bool {
 fn running(_: &str) -> bool {
     false
 }
+fn pulse_running_with(mut query: impl FnMut(&str) -> bool) -> bool {
+    ["io.github.chatgptpulse.desktop", "io.github.chatgptpulse.musicpreview"]
+        .iter().any(|id| query(id))
+}
+fn pulse_running() -> bool { pulse_running_with(running) }
+
 pub fn client_running() -> bool {
     ["com.openai.codex", "com.openai.chat", "com.openai.ChatGPT"]
         .iter()
@@ -162,7 +168,7 @@ pub fn watch() {
     };
     let mut gate = Gate::default();
     loop {
-        if gate.should_launch(client_running(), running("io.github.chatgptpulse.desktop")) {
+        if gate.should_launch(client_running(), pulse_running()) {
             // Launch only our own app; never launch, close or control the GPT client.
             if Command::new("/usr/bin/open")
                 .args(["-g", "-a"])
@@ -205,7 +211,7 @@ pub fn cli() -> bool {
     if args.iter().any(|a| a == "--watch-status") {
         println!(
             "{}",
-            serde_json::json!({"client_running":client_running(),"pulse_running":running("io.github.chatgptpulse.desktop"),"startup":status()})
+            serde_json::json!({"client_running":client_running(),"pulse_running":pulse_running(),"startup":status()})
         );
         return true;
     }
@@ -234,10 +240,21 @@ mod tests {
         assert!(!g.should_launch(true, false));
     }
     #[test]
+    fn both_app_identities_prevent_duplicate_background_launches() {
+        for existing in ["io.github.chatgptpulse.desktop", "io.github.chatgptpulse.musicpreview"] {
+            assert!(pulse_running_with(|id| id == existing));
+            let mut gate=Gate::default();
+            assert!(!gate.should_launch(true,pulse_running_with(|id|id==existing)));
+            assert!(!gate.should_launch(true,false),"Manual quit remains respected");
+        }
+        assert!(!pulse_running_with(|_|false));
+    }
+    #[test]
     fn startup_path_is_xml_escaped() {
         let p = plist("/test/A & B/\"pulse\"");
         assert!(p.contains("A &amp; B/&quot;pulse&quot;"));
         assert!(p.contains("--watch-client"));
+        assert!(p.contains("io.github.chatgptpulse.musicpreview"));
         assert!(!p.contains("AXUIElement"));
     }
 }

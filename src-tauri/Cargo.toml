@@ -1,6 +1,6 @@
 [package]
 name = "chatgpt-pulse"
-version = "0.16.6"
+version = "0.18.2"
 description = "Local-first Codex/Work log usage dashboard"
 edition = "2021"
 rust-version = "1.88"
@@ -12,6 +12,9 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
+
+[target.'cfg(target_os = "macos")'.build-dependencies]
+cc = "1"
 
 [dependencies]
 tauri = { version = "2", features = ["tray-icon", "macos-private-api", "image-png"] }
@@ -35,3 +38,7 @@ lto = true
 strip = true
 panic = "abort"
 opt-level = "s"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows-version = "=0.1.7"
+windows = { version = "=0.62.2", features = ["Win32_Foundation", "Win32_Media_Audio", "Win32_Media_KernelStreaming", "Win32_Media_Multimedia", "Win32_Security", "Win32_System_Com", "Win32_System_Com_StructuredStorage", "Win32_System_Threading"] }

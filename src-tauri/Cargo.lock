@@ -324,10 +324,11 @@ checksum = "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
 
 [[package]]
 name = "chatgpt-pulse"
-version = "0.16.6"
+version = "0.18.2"
 dependencies = [
  "base64 0.23.1",
  "block2",
+ "cc",
  "objc2",
  "objc2-app-kit",
  "objc2-foundation",
@@ -339,6 +340,8 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-global-shortcut",
  "time",
+ "windows",
+ "windows-version",
 ]
 
 [[package]]

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {writeFile} from 'node:fs/promises';
+import {readFile,writeFile} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 import {defaults,emptySample} from '../src/lib/domain.js';
 import {chromium} from './playwright.mjs';
@@ -8,7 +8,7 @@ const range=async(locator,value)=>locator.evaluate((el,value)=>{el.value=String(
 try{
  const context=await browser.newContext(),page=await context.newPage({viewport:{width:1160,height:1050}});
  page.on('pageerror',e=>errors.push(String(e)));
- await page.route('http://127.0.0.1:1420/',async route=>{const response=await route.fetch();await route.fulfill({response,headers:{...response.headers(),'content-security-policy':"img-src 'self' asset: data:"}});});
+ await page.route('http://127.0.0.1:1420/',async route=>{await route.fulfill({body:await readFile('dist/index.html'),contentType:'text/html',headers:{'content-security-policy':"img-src 'self' asset: data:"}});});
  await page.goto('http://127.0.0.1:1420/',{waitUntil:'networkidle'});await page.getByRole('button',{name:'偏好设置'}).click();
  const file=page.waitForEvent('filechooser');await page.getByRole('button',{name:'导入图片',exact:true}).click();await (await file).setFiles('src-tauri/icons/128x128.png');
  await page.getByLabel('头像裁剪',{exact:true}).waitFor();await range(page.getByLabel('头像缩放',{exact:true}),1.8);await range(page.getByLabel('头像左右位置'),28);await range(page.getByLabel('头像上下位置'),65);
@@ -69,11 +69,13 @@ try{
  await overlay.evaluate(()=>window._sample({state:'waiting',activity_status:'unknown',completion:null}));await overlay.clock.fastForward(17000);
  await overlay.waitForFunction(()=>document.querySelector('.mini').classList.contains('collapsed'));
  await overlay.waitForFunction(()=>getComputedStyle(document.querySelector('.pet-bubble')).opacity==='0');
- await overlay.evaluate(()=>window._interaction({grip_active:true}));await overlay.waitForFunction(()=>!document.querySelector('.mini').classList.contains('collapsed'));
+ await overlay.evaluate(()=>window._interaction({grip_active:true}));assert.equal(await overlay.locator('.mini').evaluate(el=>el.classList.contains('collapsed')),true);
+ await overlay.locator('.mini-grip').press('Enter');await overlay.getByLabel('头像对话',{exact:true}).waitFor();
+ assert.equal(await overlay.locator('.mini').evaluate(el=>el.classList.contains('collapsed')),false);
  await overlay.evaluate(()=>{window._interaction({grip_active:false});window._sample({state:'running',activity_status:'waiting_user',activity_at:Date.now()});});await overlay.clock.fastForward(20000);
  assert.equal(await overlay.locator('.mini').evaluate(el=>el.classList.contains('collapsed')),false);
  assert.ok((await grip.boundingBox()).x>150);assert.equal(await overlay.evaluate(()=>document.documentElement.scrollWidth<=280&&document.documentElement.scrollHeight<=128),true);
  await overlay.screenshot({path:'test-results/personalization-080-docked.png'});
- checks.push('Right dock mirrors the avatar and inward bubble; idle collapses, hovering restores, and attention remains visible');
+ checks.push('Right dock mirrors the avatar and inward bubble; idle collapses, hover stays collapsed, a deliberate click opens dialogue, and attention remains visible');
  assert.deepEqual(errors,[]);await writeFile('test-results/personalization-browser.json',JSON.stringify({passed:true,checks,errors},null,2));console.log(JSON.stringify({passed:true,checks,errors}));
 }finally{await browser.close();}

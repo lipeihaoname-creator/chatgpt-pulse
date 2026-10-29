@@ -30,3 +30,10 @@ test('every linked line has an authored valid mood; all new paintings can appear
   const deck=exchangeDeck(()=>NaN);assert.ok(deck.next(role).lines.length===3);
  }
 });
+
+test('music uses a random shorter deadline and still requires all dialogue switches',()=>{
+ const d=idleDirector(()=>0),base={eligible:true,chat:true,motion:false,frequency:'balanced',music:true};
+ assert.equal(d.tick({...base,now:0}),null);for(let now=10000;now<45000;now+=10000)assert.equal(d.tick({...base,now}),null);assert.equal(d.tick({...base,now:45000}),'chat');
+ const off=idleDirector(()=>0);off.tick({...base,now:0,chat:false});assert.equal(off.tick({...base,now:100000,chat:false}),null);
+ const deck=exchangeDeck(()=>.99);assert.ok(deck.next('roxy',{music:true,preferMusic:true}).music);
+});

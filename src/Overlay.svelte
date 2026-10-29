@@ -7,7 +7,7 @@
   import {listen} from '@tauri-apps/api/event';
   import {call,subscribe,native,listenLocal} from './lib/bridge.js';
   import {emptySample,number,statusDisplay,rateDisplay,defaults,acceptSample,acceptSettings,pulseCells,completionDisplay} from './lib/domain.js';
-  let custom=null,stateAvatars={},face,avatarError='',packError='',dockSide=0,avatarRight=false,nativePointer=false,offlineTest=false;
+  let custom=null,stateAvatars={},face,avatarError='',packError='',dockSide=0,avatarRight=false,nativePointer=false,offlineTest=false,musicAvailable=false;
   const packLoader=avatarLoader(value=>stateAvatars=value||{},value=>packError=value,readStateAvatars);
   const loader=avatarLoader(value=>custom=value,value=>avatarError=value);onDestroy(()=>{loader.dispose();packLoader.dispose();});
   $: if(!sessionId)loader.load(settings.avatar_revision);
@@ -32,6 +32,7 @@
       keep(await subscribe(receive,receiveSettings));
       const b=await call('bootstrap_overlay');
       if(disposed)return;
+      if(native)musicAvailable=!!(await call('music_status').catch(()=>null))?.supported;
       offlineTest=!!b.offline_test;
       nativePointer=native&&(b.platform??'macos')==='macos';
       receive(b.sample);receiveSettings(b.settings);interaction(b.overlay_interaction);
@@ -50,4 +51,4 @@
     try{await call('overlay_drag');}catch(e){error=String(e);}
   }
 </script>
-<MonitorFace proactive {offlineTest} bind:this={face} bubbleOnly={!!sessionId} {nativePointer} {settings} {sample} {work} {speed} {pulses} {card} {custom} {stateAvatars} {dockSide} {avatarRight} {locked} {faded} {gripActive} {dragging} error={error||packError||(settings.character==='custom'?avatarError:'')} ondrag={drag} onlock={lock} onmenu={menu}/>
+<MonitorFace {musicAvailable} proactive {offlineTest} bind:this={face} bubbleOnly={!!sessionId} {nativePointer} {settings} {sample} {work} {speed} {pulses} {card} {custom} {stateAvatars} {dockSide} {avatarRight} {locked} {faded} {gripActive} {dragging} error={error||packError||(settings.character==='custom'?avatarError:'')} ondrag={drag} onlock={lock} onmenu={menu}/>

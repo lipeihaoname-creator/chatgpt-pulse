@@ -43,6 +43,12 @@ Checksums: [SHA256SUMS](https://github.com/voidlph-dev/chatgpt-pulse/releases/do
 
 On macOS, open the DMG and drag the app to Applications. On Windows, install one of the two EXEs. End users do not need Node.js, Rust, Python or a development server. The Mac candidate is ad hoc signed and not notarized; Windows installers are unsigned. Check [Mac installation](docs/MAC_INSTALL.md) or [Windows installation](docs/WINDOWS_INSTALL.md) before testing.
 
+## 0.18.2 music integration candidate
+
+The candidate adds local system-output visualization (Core Audio on macOS 14.2+, WASAPI loopback on Windows 10 1703+), six spectrum styles, shareable custom presets and low-priority idle portrait motion/dialogue. Capture is opt-in; no microphone, captured-audio files or upload. Work and interaction always take priority.
+
+This branch has not published a new Release. The existing 0.16.6 links above do not contain this music candidate. See [the integration and validation notes](docs/RELEASE_0.18.2.zh-CN.md). Mac and Windows hardware/test limits remain separate.
+
 ## Features
 
 - Automatically follow compatible local logs; multiple concurrent tasks share one avatar, with separate or combined bubbles.
@@ -81,3 +87,9 @@ Source-available under **PolyForm Noncommercial 1.0.0 plus the Internal Use Addi
 The Mai and Roxy atlases are AI-assisted, unofficial fan artwork, not official anime screenshots or officially licensed assets. Rights in the original characters and works remain with their respective holders. The code license does not grant rights in those characters or imply official authorization or endorsement. See [assets](docs/ASSETS.md), [licensing](docs/LICENSING.md) and [release scope](docs/RELEASE_READINESS.md). Specific rights concerns can be reported through repository Issues; do not post private contact details or conversation content there.
 
 Not affiliated with or endorsed by OpenAI.
+
+## macOS music-reactive development candidate
+
+Opt-in system-audio spectrum, confirmed-idle portrait motion and original music conversations are being developed locally. Requires macOS 14.2+ and system-audio recording permission; no microphone, recordings, uploads or AI calls. macOS 13.3–14.1 keeps existing features. This feature has not been published as a Release. See [implementation and validation boundaries](docs/MUSIC_REACTIVE.md).
+
+See the [2026-10-29 maintenance notes](docs/MAC_REVIEW_20261029.md) for fixes and test boundaries. Updating the music candidate source does not replace the existing installer Release.

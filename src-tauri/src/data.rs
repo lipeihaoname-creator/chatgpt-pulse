@@ -91,6 +91,14 @@ pub struct Settings {
     pub idle_chat: bool,
     pub idle_motions: bool,
     pub idle_frequency: String,
+    pub music_enabled: bool,
+    pub music_spectrum: bool,
+    pub music_style: String,
+    pub music_motion: bool,
+    pub music_strength: f64,
+    pub music_dialogue: bool,
+    pub music_visual: crate::spectrum::MusicVisual,
+    pub music_presets: Vec<crate::spectrum::MusicPreset>,
 }
 impl Default for Settings {
     fn default() -> Self {
@@ -134,6 +142,14 @@ impl Default for Settings {
             idle_chat: true,
             idle_motions: true,
             idle_frequency: "balanced".into(),
+            music_enabled: false,
+            music_spectrum: true,
+            music_style: "bars".into(),
+            music_motion: true,
+            music_strength: 0.5,
+            music_dialogue: true,
+            music_visual: Default::default(),
+            music_presets: Vec::new(),
         }
     }
 }
@@ -145,6 +161,10 @@ impl Settings {
         value: serde_json::Value,
         pin: Option<String>,
     ) -> Result<Self, String> {
+        if key == "music_design" {
+            let design:crate::spectrum::MusicDesign=serde_json::from_value(value).map_err(|_|"频谱方案格式无效")?;
+            let mut next=self.clone();next.music_style=design.style;next.music_visual=design.visual;next.revision=self.revision.saturating_add(1);return Ok(next.validated());
+        }
         if !matches!(
             key,
             "auto_monitor"
@@ -179,6 +199,8 @@ impl Settings {
                 | "idle_chat"
                 | "idle_motions"
                 | "idle_frequency"
+                | "music_enabled" | "music_spectrum" | "music_style"
+                | "music_motion" | "music_strength" | "music_dialogue" | "music_visual" | "music_presets"
         ) {
             return Err("无法修改此设置".into());
         }
@@ -193,6 +215,10 @@ impl Settings {
     }
 
     pub fn validated(mut self) -> Self {
+        self.music_strength = if self.music_strength.is_finite() { self.music_strength.clamp(0., 1.) } else { 0.5 };
+        self.music_visual=self.music_visual.validated();
+        self.music_presets=crate::spectrum::clean_presets(self.music_presets);
+        if !crate::spectrum::STYLES.contains(&self.music_style.as_str()) { self.music_style = "bars".into(); }
         self.task_names = self
             .task_names
             .into_iter()
@@ -279,6 +305,9 @@ pub struct CompletionCard {
 #[derive(Clone, Debug, Serialize)]
 pub struct Sample {
     pub task_unfinished: bool,
+    pub music_idle_confirmed: bool,
+    #[serde(skip)]
+    pub music_scan_complete: bool,
     pub overlay_log_id: Option<String>,
     pub session_label: Option<String>,
     pub sessions: Vec<Sample>,
@@ -329,6 +358,8 @@ impl Default for Sample {
     fn default() -> Self {
         Self {
             task_unfinished: false,
+            music_idle_confirmed: false,
+            music_scan_complete: false,
             overlay_log_id: None,
             session_label: None,
             sessions: vec![],

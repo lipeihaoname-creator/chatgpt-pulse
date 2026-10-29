@@ -24,6 +24,7 @@ export async function call(command,args={}) {
     }
     case 'set_custom_avatar':
       localStorage.setItem('pulse-custom-avatar',args.image);settings={...settings,avatar_crop:{x:50,y:50,zoom:1},character:'custom',avatar_revision:settings.avatar_revision+1,revision:settings.revision+1};localStorage.setItem('pulse-settings',JSON.stringify({...settings,locked:true}));return settings;
+    case 'music_status': return {status:'unsupported',detail:'浏览器预览不采集系统音频',supported:false,epoch:0,sequence:0,at:0,bars:Array(24).fill(0)};
     case 'sample_snapshot': return sample;
     case 'settings_snapshot': return settings;
     case 'bootstrap_overlay': return {settings,sample,overlay_interaction:{}};
@@ -32,7 +33,7 @@ export async function call(command,args={}) {
       if(args.action==='live')throw Error('浏览器预览不能读取本地日志。请运行桌面应用，或查看演示。');
       clearInterval(timer);const epoch=++browserEpoch;sample={...emptySample(),stream_epoch:epoch};
       if(args.action==='demo'){tick=0;sample={...demoSample(tick),stream_epoch:epoch,checked_at:Date.now(),poll_sequence:1};timer=setInterval(()=>{sample={...demoSample(++tick),stream_epoch:epoch,checked_at:Date.now(),poll_sequence:tick+1};publish();},1000);}publish();return sample;
-    case 'patch_settings': settings=cleanSettings({...settings,[args.key]:args.value,...(args.key==='follow_latest'&&!args.value?{pinned_log:args.pinnedLog}:{}),revision:settings.revision+1});localStorage.setItem('pulse-settings',JSON.stringify({...settings,locked:true}));return settings;
+    case 'patch_settings': settings=cleanSettings({...settings,...(args.key==='music_design'?{music_style:args.value?.style,music_visual:args.value?.visual}:{[args.key]:args.value}),...(args.key==='follow_latest'&&!args.value?{pinned_log:args.pinnedLog}:{}),revision:settings.revision+1});localStorage.setItem('pulse-settings',JSON.stringify({...settings,locked:true}));return settings;
     case 'set_client_watch': throw Error('浏览器预览不能修改系统启动项。');
     case 'list_logs': return [];
     case 'history': return [];
@@ -53,7 +54,7 @@ export async function subscribe(fn,onSettings=()=>{}){
     if(disposed||busy)return;
     if(!location.search.includes('overlay')&&document.visibilityState==='hidden')return;
     busy=true;
-    try{const view=document.querySelector('[data-pulse-sequence]'),n=Number(view?.dataset.pulseSequence);receive(await invoke('sample_snapshot',{renderedIdleMood:view?.dataset.idleMood||null,renderedCompanion:!!document.querySelector('.pet-dialogue'),renderedTasks:[...document.querySelectorAll('[data-task-id]')].map(el=>[el.dataset.taskId,el.dataset.taskOutput===''?null:Number(el.dataset.taskOutput)]),receivedLogId:latest.log_id||null,receivedSessionCount:latest.sessions?.length||0,renderedAvatarCount:document.querySelectorAll('.mini-grip .pet-face, .mini-grip > .character-portrait').length,renderedLogId:view?.dataset.pulseLogId||null,renderedOutputTokens:view?.dataset.pulseOutput!==''&&view?.dataset.pulseOutput!==undefined?Number(view.dataset.pulseOutput):null,renderedSequence:Number.isFinite(n)?n:null,renderedActivity:view?.dataset.pulseActivity||null,renderedCompletion:view?.dataset.pulseCard==='true'}));onSettings(await invoke('settings_snapshot'));}catch{}finally{busy=false;}
+    try{const view=document.querySelector('[data-pulse-sequence]'),n=Number(view?.dataset.pulseSequence);receive(await invoke('sample_snapshot',{renderedIdleMood:view?.dataset.idleMood||null,renderedMusicMoving:document.querySelector('.music-pose')?.dataset.musicMoving==='true',renderedMusicDebug:document.querySelector('.music-pose')?.dataset.musicDebug||null,renderedMusicConversation:document.querySelector('.mini')?.dataset.musicTalk==='true',renderedCompanion:!!document.querySelector('.pet-dialogue'),renderedTasks:[...document.querySelectorAll('[data-task-id]')].map(el=>[el.dataset.taskId,el.dataset.taskOutput===''?null:Number(el.dataset.taskOutput)]),receivedLogId:latest.log_id||null,receivedSessionCount:latest.sessions?.length||0,renderedAvatarCount:document.querySelectorAll('.mini-grip .pet-face, .mini-grip > .character-portrait').length,renderedLogId:view?.dataset.pulseLogId||null,renderedOutputTokens:view?.dataset.pulseOutput!==''&&view?.dataset.pulseOutput!==undefined?Number(view.dataset.pulseOutput):null,renderedSequence:Number.isFinite(n)?n:null,renderedActivity:view?.dataset.pulseActivity||null,renderedCompletion:view?.dataset.pulseCard==='true'}));onSettings(await invoke('settings_snapshot'));}catch{}finally{busy=false;}
   };
   let off;
   try{off=await listenLocal('pulse:sample',event=>receive(event.payload));}catch{}

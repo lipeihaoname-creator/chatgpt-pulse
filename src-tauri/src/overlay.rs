@@ -129,7 +129,10 @@ pub struct Screen {
 /// layout at each monitor's scale, never the old configured window dimensions.
 /// A disconnected display should move the overlay to the nearest visible spot.
 pub fn restored_position(p: (i32, i32), layout: &str, screens: &[Screen]) -> (i32, i32) {
-    let (width, height) = dimensions(layout, true);
+    restored_position_sized(p, dimensions(layout, true), screens)
+}
+pub fn restored_position_sized(p: (i32, i32), size: (f64, f64), screens: &[Screen]) -> (i32, i32) {
+    let (width, height) = size;
     screens
         .iter()
         .map(|m| {

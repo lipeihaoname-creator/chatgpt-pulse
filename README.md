@@ -38,9 +38,17 @@ Mac / Windows 桌面上的 Work / Codex 工作监测与角色悬浮窗。读取�
 - 麻衣、洛琪希角色主题，状态表情、飘动粒子、随机空闲互动、勿扰和减少动态效果。
 - 本地数字摘要可选保存，默认关闭；不保存聊天正文，不调用额外 AI 或收费 API。
 
+## 0.18.2 音乐律动合并候选
+
+新增系统播放音频频谱、确认空闲时的人物律动及音乐话题，默认关闭；不访问麦克风、不保存或上传音频。Mac 使用 Core Audio（采集需 14.2+），Windows 使用 WASAPI 回环（采集需 Windows 10 1703+）。提供六种频谱、条带对比度及可保存/分享的外观方案；工作和用户交互优先。
+
+本分支是待发布的两端合并候选，不能将下方历史 Release 当作音乐版。安装资产与两端验证范围见 [0.18.2 整合说明](docs/RELEASE_0.18.2.zh-CN.md)，功能见 [音乐律动](docs/MUSIC_REACTIVE.md) 和 [频谱工作室](docs/SPECTRUM_STUDIO.md)。
+
+本轮维护修复与实测范围见 [2026-10-29 检查记录](docs/MAC_REVIEW_20261029.md)。现有 Release 保留，音乐候选源码更新不等于新安装包已发布。
+
 ## 安装与使用
 
-两端统一为 **0.16.6 首个公开测试版**。从 [GitHub Releases](https://github.com/voidlph-dev/chatgpt-pulse/releases/tag/v0.16.6) 下载适合你系统的安装包。
+下列是既有 **0.16.6 公开测试版**下载入口，不包含本分支音乐候选。从 [GitHub Releases](https://github.com/voidlph-dev/chatgpt-pulse/releases/tag/v0.16.6) 下载适合你系统的安装包。
 
 | 下载文件 | 用途 |
 |---|---|
@@ -51,7 +59,7 @@ Mac / Windows 桌面上的 Work / Codex 工作监测与角色悬浮窗。读取�
 
 使用者无需 Node、Rust、Python 或开发服务器。Mac 步骤见 [Mac 安装说明](docs/MAC_INSTALL.md)，Windows 两个安装器任选其一，见 [Windows 使用说明](docs/WINDOWS_INSTALL.md)。Windows EXE 未签名，可能出现发布者未知提示；无需关闭系统安全功能。下载后可按 [`SHA256SUMS`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.16.6/SHA256SUMS) 核对文件；PowerShell 步骤见 [Windows 下载校验](docs/WINDOWS_INSTALL.md#下载与校验)。
 
-默认读取当前用户的 `~/.codex/sessions`。若客户端配置了自定义位置，Pulse 进程可通过绝对路径环境变量 `CODEX_HOME` 指向该目录。普通 ChatGPT 聊天、浏览器聊天和不生成兼容本地日志的客户端不在支持范围内。无需为本应用授予辅助功能、屏幕录制或全磁盘访问权限。
+默认读取当前用户的 `~/.codex/sessions`。若客户端配置了自定义位置，Pulse 进程可通过绝对路径环境变量 `CODEX_HOME` 指向该目录。普通 ChatGPT 聊天、浏览器聊天和不生成兼容本地日志的客户端不在支持范围内。工作日志监测无需辅助功能、屏幕录制或全磁盘访问权限；可选音乐律动需要系统音频录制授权。
 
 悬浮窗右键打开菜单；Mac 用 `⌘⌃⌥P`、Windows 用 `Ctrl+Alt+Shift+P` 编辑，也可在主窗口点击“编辑悬浮条”。点击头像互动，按住拖动，编辑后可完成或取消。在设置里可选择“随 GPT 启动”。关闭主窗口仍在后台运行；Mac 从菜单栏菜单或用 `⌘Q` 退出，Windows 从系统托盘菜单退出。
 
@@ -59,7 +67,7 @@ Mac / Windows 桌面上的 Work / Codex 工作监测与角色悬浮窗。读取�
 |---|---|
 | Apple Silicon Mac | 0.16.6 本机验收范围见 [Mac 验收说明](docs/MAC_ACCEPTANCE.md) |
 | Intel Mac | 已生成通用二进制中的 Intel 架构；尚无 Intel 实机验收 |
-| Windows x64 | 0.16.6 本机验收；Windows 10/其他机器仍待验证，见 [Windows 验收报告](docs/WINDOWS_ACCEPTANCE.md) |
+| Windows x64 | 0.18.2 原交付本机验收；合并源码未在 Windows 重新构建，Windows 10/其他机器仍待验证，见 [Windows 音乐报告](docs/WINDOWS_MUSIC_REPORT.md) |
 | Chrome / 普通聊天 | 暂不支持 |
 
 候选 Mac 包使用临时签名，尚未完成 Apple Developer ID 签名与公证。本阶段不购买签名或公证服务，提供明确标注未公证的测试包；其他 Mac 下载后可能出现系统安全提示，仍需异机测试，参见 [发布清单](docs/RELEASE.md)。不能保证所有系统版本、日志格式或电脑都可用。
@@ -84,6 +92,8 @@ Mac 通用版：
 rustup target add aarch64-apple-darwin x86_64-apple-darwin
 ./scripts/build.sh --target universal-apple-darwin --bundles app,dmg
 ```
+
+上述默认配置使用桌面身份。复现本机音乐候选时运行 `sh scripts/build-music-preview.sh`，沿用音乐候选身份；两种身份的升级边界见 [Mac 安装说明](docs/MAC_INSTALL.md#音乐候选身份与升级)。
 
 应用位于 `src-tauri/target/universal-apple-darwin/release/bundle/macos/`，安装盘位于同级 `dmg/`。源码可使用常规系统工具链；`.tools` 仅在存在本地工具链时启用，不是运行依赖。用户只下载安装包时无需 Node、Rust、Python 或 VS Code。
 

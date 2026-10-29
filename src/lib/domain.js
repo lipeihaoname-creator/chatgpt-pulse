@@ -1,8 +1,9 @@
+import {musicDefaults,cleanMusic} from './music-settings.js';
 export const defaults = {dialogue_enabled:true,overlay_layout:"bar",theme:"mint",character:"mai",motion:"spark",animations:true,show_total:false,bubble_mode:"always",task_display:"separate",task_names:{},status_accessories:true,avatar_revision:0,revision:0,auto_monitor:true,follow_latest:true,pinned_log:null,overlay_position:null,tray_enabled: true, overlay_enabled: false, locked: true, hover_hide: true, keep_history: false, retention_days: 7, interval_ms: 1000,rate_idle_seconds:30,adaptive_retention:true,completion_card:true};
 import {personalizationDefaults,cleanPersonalization} from './personalization.js';
-Object.assign(defaults,personalizationDefaults);
+Object.assign(defaults,personalizationDefaults,musicDefaults);
 export function cleanSettings(value = {}) {
-  const out = {...defaults,...cleanPersonalization(value)};
+  const out = {...defaults,...cleanPersonalization(value),...cleanMusic(value)};
   if(Number.isSafeInteger(value.revision)&&value.revision>=0)out.revision=value.revision;
   for (const key of ['tray_enabled','overlay_enabled','locked','hover_hide','keep_history','auto_monitor','follow_latest','adaptive_retention','completion_card','animations','show_total','dialogue_enabled','status_accessories']) if (typeof value[key] === 'boolean') out[key] = value[key];
   for (const [key,min,max] of [['retention_days',1,30],['interval_ms',500,3000],['rate_idle_seconds',10,120]]) if (Number.isFinite(value[key])) out[key] = Math.min(max,Math.max(min,Math.round(value[key])));
@@ -13,7 +14,7 @@ export function cleanSettings(value = {}) {
   out.task_names=Object.fromEntries(Object.entries(value.task_names&&typeof value.task_names==='object'&&!Array.isArray(value.task_names)?value.task_names:{}).filter(([id,name])=>id.length>0&&id.length<240&&typeof name==='string').slice(0,512).map(([id,name])=>[id,Array.from(name.replace(/[\u0000-\u001f\u007f-\u009f]/g,'')).slice(0,24).join('').trim()]).filter(([,name])=>name));
   return out;
 }
-export function emptySample() {return {task_unfinished:false,sessions:[],monitored_sessions:0,stream_epoch:0,retention_mode:"fixed",cadence_samples:0,expected_report_seconds:null,pulses:[],completion:null,activity_status:"unknown",activity_at:null,activity_age_seconds:null,pending_tools:0,activities:[],checked_at:null,poll_sequence:0,usage_age_seconds:null,usage_updated_at:null,running_seconds:null,current_rate:null,rate_status:"unavailable",rate_interval_seconds:null,rate_updated_at:null,rate_idle_seconds:30,follow_latest:false,source: 'logs', state: 'paused', message: '选择日志会话后，读取实际用量', log_id:null, output_tokens:null,reasoning_tokens:null,total_output_tokens:null,total_reasoning_tokens:null,measurement_id:null,log_updated_at:null,rate: null, chars_per_second: null, models: [], observed_seconds: null, scan_ms: null, nodes: 0, network: 'unknown', timestamp: Date.now(), quality: 'unavailable'};}
+export function emptySample() {return {music_idle_confirmed:false,task_unfinished:false,sessions:[],monitored_sessions:0,stream_epoch:0,retention_mode:"fixed",cadence_samples:0,expected_report_seconds:null,pulses:[],completion:null,activity_status:"unknown",activity_at:null,activity_age_seconds:null,pending_tools:0,activities:[],checked_at:null,poll_sequence:0,usage_age_seconds:null,usage_updated_at:null,running_seconds:null,current_rate:null,rate_status:"unavailable",rate_interval_seconds:null,rate_updated_at:null,rate_idle_seconds:30,follow_latest:false,source: 'logs', state: 'paused', message: '选择日志会话后，读取实际用量', log_id:null, output_tokens:null,reasoning_tokens:null,total_output_tokens:null,total_reasoning_tokens:null,measurement_id:null,log_updated_at:null,rate: null, chars_per_second: null, models: [], observed_seconds: null, scan_ms: null, nodes: 0, network: 'unknown', timestamp: Date.now(), quality: 'unavailable'};}
 export function number(value, digits = 1) {return typeof value === 'number' && Number.isFinite(value) ? value.toFixed(digits) : '—';}
 export function linePath(values, width=800, height=180) {
   const max = Math.max(60,...values.filter(v=>Number.isFinite(v)));
