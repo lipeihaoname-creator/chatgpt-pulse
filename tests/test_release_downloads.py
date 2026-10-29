@@ -35,6 +35,8 @@ class ReleaseDownloadsTests(unittest.TestCase):
         ]
 
     def response(self, url, *, api=False):
+        if api:
+            self.assertEqual(url, f"https://api.github.com/repos/{release_check.REPOSITORY}/releases/tags/{self.release['tag_name']}")
         return io.BytesIO(json.dumps(self.release).encode() if api else self.payloads[url.removeprefix(self.base)])
 
     def verify(self):

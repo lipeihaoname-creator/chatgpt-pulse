@@ -47,7 +47,7 @@ def verify(tag):
     if not re.fullmatch(r'v\d+\.\d+\.\d+', tag):
         raise ValueError('Use an explicit version tag, for example v0.16.6')
     base = f'https://github.com/{REPOSITORY}/releases/download/{tag}/'
-    with request(f'https://api.github.com/{REPOSITORY}/releases/tags/{tag}', api=True) as response:
+    with request(f'https://api.github.com/repos/{REPOSITORY}/releases/tags/{tag}', api=True) as response:
         release = json.loads(response.read(2 * 1024 * 1024))
     music = any(a['name'].startswith(f'ChatGPT-Pulse-{version}-windows-x64-music-') for a in release['assets'])
     names = [f'ChatGPT-Pulse-{version}-windows-x64-music-offline-setup.exe',
