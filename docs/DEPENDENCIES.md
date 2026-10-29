@@ -21,3 +21,7 @@
 ## 当前范围
 
 Mac 的两种架构已在本机核对。Windows 0.16.6 的依赖清单、NSIS/插件许可和 WebView2 通知来自 Windows 实机交接，见 [Windows 依赖记录](WINDOWS_DEPENDENCIES.md) 与 `licenses/windows-dependency-inventory.json`；Mac 的核对不替代 Windows 构建和验收。开发工具、角色图片、应用图标和其他素材仍分别处理。
+
+## 0.18.2 音乐合并
+
+Windows-only 显式加入锁定的 `windows 0.62.2`、`windows-version 0.1.7`；两者在现有 Windows 依赖清单及第三方通知中已有 MIT/Apache-2.0 许可记录，本次没有改根 LICENSE 或覆盖既有通知。Mac 原生 cc/Objective-C 仍只在 macOS 构建；Windows COM 依赖只在 Windows 目标解析。Windows 安装器按交付时锁文件构建，本机 Mac 重新构建的结果另见整合报告。

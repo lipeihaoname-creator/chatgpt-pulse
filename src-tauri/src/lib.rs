@@ -1,3 +1,10 @@
+mod audio_analysis;
+#[cfg(any(target_os = "windows", test))]
+mod audio_format;
+#[cfg(target_os = "windows")]
+mod wasapi;
+mod music;
+mod spectrum;
 mod activity;
 mod avatar;
 mod background;
@@ -18,7 +25,7 @@ use data::{History, Sample, Settings};
 use serde::Serialize;
 use std::{
     sync::{
-        atomic::{AtomicBool, AtomicU64, AtomicU8, Ordering},
+        atomic::{AtomicBool, AtomicI64, AtomicU64, AtomicU8, Ordering},
         Arc, Mutex,
     },
     time::{Duration, Instant},
@@ -45,6 +52,7 @@ struct Pulse {
     task_ids: Mutex<std::collections::BTreeMap<String, String>>,
     primary_work: Mutex<Option<String>>,
     sync_scheduled: AtomicBool,
+    monitor_since: AtomicI64,
 }
 struct Floating {
     overlay_interaction: Mutex<overlay::Interaction>,
@@ -99,6 +107,7 @@ struct Bootstrap {
     overlay_interaction: overlay::Interaction,
 }
 fn publish(app: &tauri::AppHandle, mut sample: Sample) {
+    sample.music_idle_confirmed = music::confirmed_idle(&sample, data::now(), app.state::<Pulse>().monitor_since.load(Ordering::SeqCst));
     let state = app.state::<Pulse>();
     let mut primary = state.primary_work.lock().unwrap();
     let editing = state.floating.edit_session.lock().unwrap().is_some();
@@ -306,7 +315,10 @@ fn sample_snapshot(
     rendered_output_tokens: Option<u64>,
     rendered_avatar_count: Option<u64>,
     rendered_idle_mood: Option<String>,
+    rendered_music_moving: Option<bool>,
+    rendered_music_debug: Option<String>,
     rendered_companion: Option<bool>,
+    rendered_music_conversation: Option<bool>,
     rendered_tasks: Option<Vec<(String, Option<u64>)>>,
     received_log_id: Option<String>,
     received_session_count: Option<u64>,
@@ -324,7 +336,7 @@ fn sample_snapshot(
         write_test_probe(
             window.app_handle(),
             label,
-            serde_json::json!({"at":data::now(),"log_id":sample.log_id,"output_tokens":sample.output_tokens,"rendered_log_id":rendered_log_id.filter(|id|Some(id)==sample.log_id.as_ref()),"rendered_output_tokens":rendered_output_tokens,"rendered_avatar_count":rendered_avatar_count,"rendered_idle_mood":rendered_idle_mood.filter(|m|matches!(m.as_str(),"smile"|"curious"|"nod"|"sway"|"stretch"|"glance-left"|"glance-right"|"shy"|"relax"|"bashful"|"pout"|"sleepy"|"proud")),"rendered_companion":rendered_companion,"rendered_tasks":rendered_tasks.unwrap_or_default().into_iter().filter(|(id,_)| sample.log_id.as_ref()==Some(id) || sample.sessions.iter().any(|s|s.log_id.as_ref()==Some(id))).take(512).collect::<Vec<_>>(),"received_log_id":received_log_id.filter(|id|Some(id)==sample.log_id.as_ref()),"received_session_count":received_session_count,"sequence":sample.poll_sequence,"rendered_sequence":rendered_sequence,"rendered_activity":rendered_activity.filter(|s|matches!(s.as_str(),"processing"|"reasoning"|"responding"|"tool"|"quiet"|"waiting_user"|"waiting_approval"|"completed"|"aborted"|"paused"|"unknown"|"waiting"|"loading"|"incomplete"|"unavailable"|"disconnected"|"retrying")),"rendered_completion":rendered_completion,"main_visible":main_visible,"native_tap_monitor":state.floating.tap_monitor.load(Ordering::SeqCst),"edit_locked":state.settings.lock().unwrap().locked,"position":window.outer_position().ok().map(|p|[p.x,p.y]),"size":window.outer_size().ok().map(|p|[f64::from(p.width),f64::from(p.height),window.scale_factor().unwrap_or(1.)]),"view_visible":window.is_visible().unwrap_or(false),"view_focused":window.is_focused().unwrap_or(false)}),
+            serde_json::json!({"at":data::now(),"log_id":sample.log_id,"output_tokens":sample.output_tokens,"rendered_log_id":rendered_log_id.filter(|id|Some(id)==sample.log_id.as_ref()),"rendered_output_tokens":rendered_output_tokens,"rendered_avatar_count":rendered_avatar_count,"rendered_idle_mood":rendered_idle_mood.filter(|m|matches!(m.as_str(),"smile"|"curious"|"nod"|"sway"|"stretch"|"glance-left"|"glance-right"|"shy"|"relax"|"bashful"|"pout"|"sleepy"|"proud")),"music_idle_confirmed":sample.music_idle_confirmed,"rendered_music_moving":rendered_music_moving,"rendered_music_debug":rendered_music_debug.filter(|s|s.len()<300).and_then(|s|serde_json::from_str::<serde_json::Value>(&s).ok()),"rendered_companion":rendered_companion,"rendered_music_conversation":rendered_music_conversation,"rendered_tasks":rendered_tasks.unwrap_or_default().into_iter().filter(|(id,_)| sample.log_id.as_ref()==Some(id) || sample.sessions.iter().any(|s|s.log_id.as_ref()==Some(id))).take(512).collect::<Vec<_>>(),"received_log_id":received_log_id.filter(|id|Some(id)==sample.log_id.as_ref()),"received_session_count":received_session_count,"sequence":sample.poll_sequence,"rendered_sequence":rendered_sequence,"rendered_activity":rendered_activity.filter(|s|matches!(s.as_str(),"processing"|"reasoning"|"responding"|"tool"|"quiet"|"waiting_user"|"waiting_approval"|"completed"|"aborted"|"paused"|"unknown"|"waiting"|"loading"|"incomplete"|"unavailable"|"disconnected"|"retrying")),"rendered_completion":rendered_completion,"main_visible":main_visible,"native_tap_monitor":state.floating.tap_monitor.load(Ordering::SeqCst),"edit_locked":state.settings.lock().unwrap().locked,"position":window.outer_position().ok().map(|p|[p.x,p.y]),"size":window.outer_size().ok().map(|p|[f64::from(p.width),f64::from(p.height),window.scale_factor().unwrap_or(1.)]),"view_visible":window.is_visible().unwrap_or(false),"view_focused":window.is_focused().unwrap_or(false)}),
         );
     }
     if std::env::var_os("PULSE_OFFLINE_TEST").is_some()
@@ -421,6 +433,7 @@ fn control(
     }
     // Epoch invalidates in-flight reads, so an old source cannot publish after switching.
     let continuing_live = mode == 1 && state.mode.load(Ordering::SeqCst) == 1;
+    if !continuing_live { state.monitor_since.store(data::now(), Ordering::SeqCst); }
     // A detail change must not briefly look like a pause to the sampler and
     // cause it to discard the other tasks' readers.
     if !continuing_live {
@@ -509,6 +522,8 @@ fn patch_settings(
         *live = next.clone();
         next
     };
+    if key == "music_enabled" && !settings.music_enabled { app.state::<music::Music>().request(app.clone(), false); }
+    if key=="overlay_enabled" && settings.overlay_enabled {if let Some(w)=app.get_webview_window("overlay"){if w.is_minimized().unwrap_or(false){let _=w.unminimize();}}}
     apply_overlay(&app)?;
     if let Some(tray) = app.tray_by_id("pulse") {
         tray.set_visible(settings.tray_enabled)
@@ -783,7 +798,7 @@ fn restore_overlay_position(app: &tauri::AppHandle, settings: &Settings) {
                     scale: m.scale_factor(),
                 })
                 .collect::<Vec<_>>();
-            let target = overlay::restored_position((p.x, p.y), &settings.overlay_layout, &screens);
+            let target = overlay::restored_position_sized((p.x, p.y), windows::group_dimensions(&app.state::<Pulse>().sample.lock().unwrap(), settings), &screens);
             write_test_probe(
                 app,
                 "restore",
@@ -834,6 +849,38 @@ fn persist_overlay_position(app: &tauri::AppHandle, label: &str, floating: &Floa
     }
     let _ = app.emit("pulse:settings", &*s);
 }
+// Explicitly opted-in isolated integration fixture only. No production window
+// command, external path or arbitrary evaluation is accepted by this helper.
+fn isolated_ui_control(app: &tauri::AppHandle) {
+    if std::env::var_os("PULSE_OFFLINE_TEST").is_none() || std::env::var_os("PULSE_RENDER_PROBE").is_none()
+        || std::env::var_os("PULSE_TEST_UI_CONTROL").is_none() { return; }
+    let state=app.state::<Pulse>();
+    let Some(root)=state.log_root.parent() else{return;};let file=root.join("fixture-ui-command.json");
+    let Ok(meta)=std::fs::symlink_metadata(&file) else{return;};
+    if !meta.is_file() || meta.len()>1024 {return;}
+    let Ok(bytes)=std::fs::read(&file) else{return;};let _=std::fs::remove_file(file);
+    let Ok(value)=serde_json::from_slice::<serde_json::Value>(&bytes) else{return;};
+    let Some(nonce)=value["nonce"].as_u64() else{return;};
+    let Some(action)=value["action"].as_str().filter(|a|matches!(*a,"audio-off"|"audio-on"|"hide"|"show"|"minimize"|"restore"|"inspect")) else{return;};
+    let action=action.to_string();let handle=app.clone();
+    let _=app.run_on_main_thread(move||{
+        let result=(||->Result<(),String>{
+            if matches!(action.as_str(),"audio-off"|"audio-on"|"hide"|"show") {
+                let key=if action.starts_with("audio-"){"music_enabled"}else{"overlay_enabled"};
+                let enabled=matches!(action.as_str(),"audio-on"|"show");
+                patch_settings(handle.clone(),handle.state::<Pulse>(),key.into(),serde_json::json!(enabled),None)?;
+                if action=="audio-on" {let main=handle.get_webview_window("main").ok_or("No fixture main window")?;music::music_start(handle.clone(),main)?;}
+            } else if let Some(window)=handle.get_webview_window("overlay") {
+                if action=="minimize" {window.minimize().map_err(|e|e.to_string())?;}
+                if action=="restore" {window.unminimize().map_err(|e|e.to_string())?;}
+                music::notify_visibility(&handle);
+            }
+            Ok(())
+        })();
+        let minimized=handle.get_webview_window("overlay").and_then(|w|w.is_minimized().ok());
+        write_test_probe(&handle,"control",serde_json::json!({"nonce":nonce,"action":action,"error":result.err(),"minimized":minimized}));
+    });
+}
 fn sampler(app: tauri::AppHandle) {
     std::thread::spawn(move || {
         let mut readers: std::collections::HashMap<String, logs::Tail> =
@@ -845,6 +892,7 @@ fn sampler(app: tauri::AppHandle) {
         let mut demo_start = Instant::now();
         let mut activity = background::MonitoringActivity::default();
         loop {
+            isolated_ui_control(&app);
             // Restore through the owning Tauri event loop. The launcher may be
             // hidden/background, so direct cross-process ShowWindow is unreliable.
             if std::env::var_os("PULSE_OFFLINE_TEST").is_none() && instance::take_reopen() {
@@ -1002,6 +1050,7 @@ fn sampler(app: tauri::AppHandle) {
                             settings.follow_latest,
                             read_error,
                         );
+                        sample.music_scan_complete = true;
                         sample.monitored_sessions = count;
                         sample.sessions = samples.into_iter().map(|(_, s)| s).collect();
                         if files != last_files {
@@ -1400,6 +1449,8 @@ pub fn run() -> Result<(), String> {
                 .build(),
         )
         .invoke_handler(tauri::generate_handler![
+            music::music_status,
+            music::music_start,
             bootstrap,
             bootstrap_overlay,
             sample_snapshot,
@@ -1439,6 +1490,7 @@ pub fn run() -> Result<(), String> {
             db.save_settings(&settings).map_err(std::io::Error::other)?;
             db.prune(settings.retention_days)
                 .map_err(std::io::Error::other)?;
+            app.manage(music::Music::default());
             app.manage(Pulse {
                 settings: Mutex::new(settings.clone()),
                 sample: Mutex::new(Sample::default()),
@@ -1462,6 +1514,7 @@ pub fn run() -> Result<(), String> {
                 task_ids: Mutex::new(Default::default()),
                 primary_work: Mutex::new(None),
                 sync_scheduled: AtomicBool::new(false),
+                monitor_since: AtomicI64::new(data::now()),
             });
             app.on_menu_event(|app, event| {
                 if event.id.as_ref().starts_with("quick-") {
@@ -1532,7 +1585,7 @@ pub fn run() -> Result<(), String> {
                 show_main(app.handle().clone()).map_err(std::io::Error::other)?;
             }
             if let Some(w) = app.get_webview_window("overlay") {
-                let (width, height) = overlay::dimensions(&settings.overlay_layout, true);
+                let (width, height) = windows::group_dimensions(&Sample::default(), &settings);
                 w.set_size(tauri::LogicalSize::new(width, height))?;
             }
             restore_overlay_position(app.handle(), &settings);
@@ -1548,6 +1601,11 @@ pub fn run() -> Result<(), String> {
                 "overlay".into(),
                 app.state::<Pulse>().floating.clone(),
             );
+            // The persisted opt-in expresses user intent, not an authorization
+            // token. Core Audio still enforces current macOS permission here.
+            if settings.music_enabled && app.state::<music::Music>().snapshot().supported {
+                app.state::<music::Music>().request(app.handle().clone(), true);
+            }
             Ok(())
             })();
             if let Err(error) = initialized {
@@ -1559,6 +1617,10 @@ pub fn run() -> Result<(), String> {
             Ok(())
         })
         .on_window_event(|window, event| {
+            if window.label()=="overlay" && window.try_state::<music::Music>().is_some()
+                && matches!(event,tauri::WindowEvent::Resized(_)|tauri::WindowEvent::Focused(_)) {
+                music::notify_visibility(window.app_handle());
+            }
             if window.label() == "overlay" || window.label().starts_with("task-") {
                 if let tauri::WindowEvent::Moved(p) = event {
                     if let Some(state) = window.try_state::<Pulse>() {
@@ -1593,6 +1655,7 @@ pub fn run() -> Result<(), String> {
             }
             if matches!(event, tauri::RunEvent::ExitRequested { .. }) {
                 let state = app.state::<Pulse>();
+                app.state::<music::Music>().shutdown();
                 state.mode.store(0, Ordering::SeqCst);
                 state.epoch.fetch_add(1, Ordering::SeqCst);
             }

@@ -6,6 +6,7 @@
   import {listen} from '@tauri-apps/api/event';
   import Overlay from './Overlay.svelte';
   import Appearance from './Appearance.svelte';
+  import MusicSettings from './MusicSettings.svelte';
   import SessionList from './SessionList.svelte';
   import appIcon from './assets/app-icon.png';
   import PulseStrip from './PulseStrip.svelte';
@@ -28,7 +29,7 @@
   $: selectionUnlisted=!!selectedLog&&!logs.some(f=>f.id===selectedLog);
   $: synthetic=sample.source==='demo';
   $: tag=synthetic?'合成':'日志报告';
-  const tabs=[['overview','◉','实时概览'],['history','◷','本地记录'],['settings','⚙','偏好设置']];
+  const tabs=[['overview','◉','实时概览'],['history','◷','本地记录'],['settings','⚙','偏好设置'],['music','♫','音乐律动']];
   $: active=sample.state!=='paused';
   $: badge=synthetic?'合成演示':sample.state==='paused'?'尚未开始':sourceStatus.label;
   $: path=linePath(values);
@@ -62,7 +63,7 @@
     return()=>{disposed=true;historyRequest++;clearInterval(ticker);offs.forEach(off=>off());};
   });
   async function control(action){busy=true;error='';values=[];try{receive(await call('control',{action,logId:action==='live'?selectedLog:null}));if(action==='pause')await refreshHistory();}catch(e){error=String(e);}finally{busy=false;}}
-  async function change(key,value){error='';try{receiveSettings(await call('patch_settings',{key,value,pinnedLog:key==='follow_latest'&&!value?(sample.log_id||selectedLog||null):null}));}catch(e){error=String(e);}}
+  async function change(key,value){error='';try{receiveSettings(await call('patch_settings',{key,value,pinnedLog:key==='follow_latest'&&!value?(sample.log_id||selectedLog||null):null}));return true;}catch(e){error=String(e);return false;}}
   async function setWatch(enabled){error='';busy=true;try{startup=await call('set_client_watch',{enabled});}catch(e){error=String(e);}finally{busy=false;}}
   async function clear(){if(clearingHistory)return;clearingHistory=true;historyRequest++;try{await call('clear_history');history=[];}catch(e){error=String(e);}finally{clearingHistory=false;}}
   async function finishEdit(cancel=false){try{const locked=await call('overlay_edit',{editing:false,cancel});settings={...settings,locked};}catch(e){error=String(e);}}
@@ -73,16 +74,16 @@
 <div class="shell" data-pulse-sequence={sample.poll_sequence} data-pulse-activity={work.key} data-pulse-card={!!card}>
   <aside>
     <div class="brand"><span class="brand-icon app-brand-icon"><img src={appIcon} alt="ChatGPT Pulse 图标"/></span><div>ChatGPT<span>Pulse<span class="version"> / {version.split('.').slice(0,2).join('.')}</span></span></div></div>
-    <nav aria-label="主导航">{#each tabs as item}<button class:selected={tab===item[0]} onclick={()=>openTab(item[0])}><span>{item[1]}</span>{item[2]}{#if tab===item[0]}<i></i>{/if}</button>{/each}</nav>
+    <nav aria-label="主导航">{#each tabs as item}<button class:selected={tab===item[0]} onclick={()=>openTab(item[0])}><span aria-hidden="true">{item[1]}</span>{item[2]}{#if tab===item[0]}<i></i>{/if}</button>{/each}</nav>
 
   </aside>
   <main>
-    <header class="page-header"><h1>{tab==='overview'?'实时概览':tab==='history'?'本地记录':'偏好设置'}</h1></header>
+    <header class="page-header"><h1>{tab==='overview'?'实时概览':tab==='history'?'本地记录':tab==='music'?'音乐律动':'偏好设置'}</h1></header>
     {#if error}<div class="error" role="alert">{error}<button onclick={()=>error=''} aria-label="关闭提示">×</button></div>{/if}
     {#if offlineTest}<div class="preview-note" role="status">隔离测试 · 模拟日志，不读取真实 Work</div>{/if}
     {#if !native}<div class="preview-note">浏览器预览 · 本地监测请使用桌面应用</div>{/if}
     {#if sample.source==='demo'}<div class="demo-banner"><b>合成演示</b>仅供预览，不代表真实模型速度。<button onclick={()=>control('pause')}>退出演示</button></div>{/if}
-    {#if sourceStatus.warn}<div class="source-status" role="status" data-source-status={sourceStatus.state}><b>{sourceStatus.label}</b><span>{sourceStatus.detail}</span>{#if sourceStatus.count}<small>发现 {sourceStatus.count} 个兼容日志{sourceStatus.lastWrite?` · 最近写入 ${new Date(sourceStatus.lastWrite).toLocaleString('zh-CN')}`: ''}</small>{/if}</div>{/if}
+    {#if tab==='overview'&&sourceStatus.warn}<div class="source-status" role="status" data-source-status={sourceStatus.state}><b>{sourceStatus.label}</b><span>{sourceStatus.detail}</span>{#if sourceStatus.count}<small>发现 {sourceStatus.count} 个兼容日志{sourceStatus.lastWrite?` · 最近写入 ${new Date(sourceStatus.lastWrite).toLocaleString('zh-CN')}`: ''}</small>{/if}</div>{/if}
     {#if !settings.locked}<div class="edit-notice" role="group" aria-label="悬浮条编辑"><span>悬浮条正在编辑 · 60 秒未移动自动完成</span><button class="secondary" onclick={()=>finishEdit(false)}>完成编辑</button><button class="quiet" onclick={()=>finishEdit(true)}>取消编辑</button></div>{/if}
     {#if tab==='overview'}
       <SessionList {sample} {clock} {settings} onselect={selectSession} onrename={(id,name)=>change('task_names',{...settings.task_names,[id]:name})}/>
@@ -110,6 +111,8 @@
     {:else if tab==='history'}
       <section class="panel history-panel"><div class="section-top"><h2>任务记录</h2>{#if history.length}<button class="danger" disabled={clearingHistory} onclick={clear}>清空记录</button>{/if}</div>
       {#if history.length}<div class="table-wrap"><table><thead><tr><th>时间</th><th>任务耗时</th><th>输出 / 推理</th><th>平均速率</th><th>来源 / 结果</th></tr></thead><tbody>{#each history as row}<tr><td>{new Date(row.started_at).toLocaleString('zh-CN')}</td><td>{number(row.duration)} 秒</td><td>{number(row.output_tokens,0)} / {number(row.reasoning_tokens,0)}</td><td>{number(row.average_rate)} Token/s</td><td>{row.source==='logs'?'日志 · '+(row.reason==='completed'?'已完成':'已中止'):'旧版界面估算'}</td></tr>{/each}</tbody></table></div>{:else}<div class="empty-history"><h3>{settings.keep_history?'暂无记录':'记录未开启'}</h3>{#if !settings.keep_history}<button class="secondary" onclick={()=>change('keep_history',true)}>开启记录</button>{/if}</div>{/if}</section>
+    {:else if tab==='music'}
+      <MusicSettings {settings} {change} {platform}/>
     {:else if tab==='settings'}
       <Appearance {settings} {change} onsettings={receiveSettings}/>
       <section class="panel settings-panel"><h2>自动运行</h2><div class="setting-row"><div><b>打开 Pulse 后自动监测</b></div><input aria-label="打开 Pulse 后自动监测" type="checkbox" checked={settings.auto_monitor} onchange={e=>change('auto_monitor',e.currentTarget.checked)}/></div>{#if startup.supported}<div class="setting-row"><div><b>随 GPT 启动</b><p>GPT 启动时自动打开 Pulse</p>{#if startup.installed&&!startup.loaded}<p class="warning">启动项存在但未加载；可关闭后重新开启，或检查系统登录项。</p>{/if}</div><input aria-label="随 GPT 启动" type="checkbox" disabled={busy||!startup.supported} checked={startup.installed&&startup.loaded} onchange={e=>setWatch(e.currentTarget.checked)}/></div>{/if}</section>

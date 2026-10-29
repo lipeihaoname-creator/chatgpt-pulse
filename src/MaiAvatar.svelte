@@ -1,6 +1,8 @@
 <script>
  import {onDestroy,onMount} from 'svelte';
- import {neutralPose,portraitGesture} from './lib/portrait-motion.js';
+ import {currentAudio} from './lib/music.js';
+ import {musicSurfaceVisible} from './lib/music-animation.js';
+ import {neutralPose,portraitGesture,musicMotion} from './lib/portrait-motion.js';
  import {portraitRegistration} from './lib/portrait-registration.js';
  import {moodExpression,moodEmotion,emotionColumn,emotionNames} from './lib/idle-companion.js';
  import open from './assets/mai/open.png';
@@ -15,7 +17,7 @@
  import {portraitAsset,cropStyle} from './lib/personalization.js';
  import {reducedMotion} from './lib/reduced-motion.js';
  export let status='paused', character='mai', custom=null, animations=true, working=false,talking=false,celebrating=false,idleMood='',idleSequence=0,interactionSequence=0;
- export let settings={},stateAvatars={};
+ export let settings={},stateAvatars={},musicOptions={};
  let shown=null,desiredPortrait=null,portraitTimers=[],settleTimer,shownAt=0,swapEye='',swapPhase='',swapDim=false,swapping=false,portraitRequest=0,destroyed=false;
  const paintCache=new Map();
  let portrait,pose,motionStopQueued=false,gesture=null,lastGesture='',lastNode=null;
@@ -56,7 +58,7 @@
   if(destroyed||request!==portraitRequest)return;
   if(decoded.some(ready=>!ready))return;
   desiredPortrait=next;
-  if(!shown||!enabled||document.visibilityState==='hidden'){cancelPortrait();shown=next;shownAt=performance.now();return;}
+  if(!shown||!enabled||!musicSurfaceVisible(currentAudio(),document.visibilityState!=='hidden')){cancelPortrait();shown=next;shownAt=performance.now();return;}
   schedulePortrait();
  }
  function schedulePortrait(){
@@ -80,7 +82,7 @@
   later(335,()=>{swapEye='';});
   later(380,()=>{swapping=false;swapPhase='';swapDim=false;portraitTimers=[];schedulePortrait();});
  }
- onMount(()=>{const visibility=()=>{if(document.visibilityState==='hidden'){cancelPortrait();if(desiredPortrait){shown=desiredPortrait;shownAt=performance.now();}}};document.addEventListener('visibilitychange',visibility);return()=>document.removeEventListener('visibilitychange',visibility);});
+ onMount(()=>{const visibility=()=>{if(!musicSurfaceVisible(currentAudio(),document.visibilityState!=='hidden')){cancelPortrait();if(desiredPortrait){shown=desiredPortrait;shownAt=performance.now();}}};document.addEventListener('visibilitychange',visibility);return()=>document.removeEventListener('visibilitychange',visibility);});
  function move(node,kind,enabled,character,sequence){
   const next=enabled?character+':'+kind+':'+sequence:'';
   if(!node||next===lastGesture&&node===lastNode)return;
@@ -114,7 +116,7 @@
  $: if((!animations||$reducedMotion)&&portrait)stopExpressionMotion();
 </script>
 <div bind:this={portrait} class="character-portrait" data-idle-motion={animations&&!$reducedMotion?idleMood:''} class:animated={animations&&!$reducedMotion&&!!characters[character]} class:working={animations&&working} class:talking={animations&&talking} data-swap-eye={swapEye} data-swap-phase={swapPhase} data-expression={cell} data-emotion={emotion||''} data-character={character} role="img" aria-label={characters[character]?`${characterName(character)} · ${emotionNames[emotion]||expressionNames[cell]}`:character==='custom'?'自定义头像':'工作状态图标'}>
- <div class="crop"><div class="breath"><div class="pose" bind:this={pose}>
+ <div class="crop"><div class="breath"><div class="music-pose" use:musicMotion={musicOptions}><div class="pose" bind:this={pose}>
   {#if shown}<div class="expression-frame" class:swap-dim={swapDim&&swapPhase==='closing'} data-rendered-expression={shown.emotion||shown.cell} data-frame-character={shown.character} class:custom-frame={!!shown.image}>
    <div class="frame-crop">
    {#if shown.image}<img src={shown.image} alt={shown.slot==='custom'?'自定义头像':'自定义状态头像'} draggable="false" style={shown.crop}/>
@@ -129,12 +131,12 @@
    {:else}<span class="plain-avatar">{shown.glyph}</span>{/if}
    </div>
   </div>{/if}
- </div></div></div>
+ </div></div></div></div>
 </div>
 <style>
  .character-portrait{width:100%;height:100%;position:relative;overflow:hidden;border-radius:50%;background:color-mix(in srgb,var(--pet-accent) 12%,var(--pet-bg));isolation:isolate}
  .expression-frame[data-frame-character=roxy]{--portrait-scale:1.18;--portrait-focus:56%}
- .crop,.frame-crop,.breath,.expression-frame,.pose,.atlas,.base-atlas,.facial-features,.eyes-window,.feature-mouth{position:absolute;inset:0}
+ .crop,.frame-crop,.breath,.music-pose,.expression-frame,.pose,.atlas,.base-atlas,.facial-features,.eyes-window,.feature-mouth{position:absolute;inset:0}
  /* Overscan is shared across every expression. Registration used to shrink
     the entire sprite, pulling its straight bottom edge inside the circle. */
  .frame-crop{transform:scale(var(--portrait-scale,1.12));transform-origin:50% var(--portrait-focus,65%)}
@@ -148,7 +150,7 @@
  .expression-frame{opacity:1;transition:opacity 100ms ease-in-out}.expression-frame.swap-dim{opacity:.3}
  .character-portrait[data-swap-eye=half] .half,.character-portrait[data-swap-eye=closed] .blink{animation:none!important;opacity:1}
  .character-portrait[data-swap-eye=half] .blink,.character-portrait[data-swap-eye=closed] .half{animation:none!important;opacity:0}
- .pose,.breath{transform-origin:50% 75%;will-change:transform}
+ .pose,.breath,.music-pose{transform-origin:50% 75%;will-change:transform}
  .atlas,.base-atlas,.feature-mouth{background-size:300% 300%;background-repeat:no-repeat;transform-origin:50% 50%}.emotion-atlas{background-size:400% 300%}.half,.blink{clip-path:inset(39% 12% 33% 12% round 20%);mask-image:linear-gradient(to bottom,transparent 39%,#000 43% 62%,transparent 67%);opacity:0;transition:opacity 45ms linear}
  .animated .half{animation:half-blink 6.6s ease-in-out infinite}
  .animated .blink{animation:blink 6.6s ease-in-out infinite}

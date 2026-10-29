@@ -65,6 +65,7 @@ pub fn project(root: &Sample, id: &str) -> Sample {
             message: "该工作会话当前没有可用数据".into(),
             ..Sample::default()
         });
+    sample.music_idle_confirmed = root.music_idle_confirmed;
     sample.overlay_log_id = root.overlay_log_id.clone();
     sample.sessions.clear();
     sample.monitored_sessions = 0;
@@ -118,7 +119,9 @@ pub fn group_dimensions(sample: &Sample, settings: &Settings) -> (f64, f64) {
         .count();
     (
         width,
-        height + if count > 1 { named as f64 * 12. } else { 0. },
+        height + if count > 1 { named as f64 * 12. } else { 0. }
+            + if count > 1 && settings.overlay_layout == "avatar" { 18. } else { 0. }
+            + crate::music::spectrum_padding(settings),
     )
 }
 
@@ -175,12 +178,14 @@ pub fn sync(app: &tauri::AppHandle, sample: &Sample, settings: &Settings) {
     }
     let _ = w.set_focusable(!settings.locked);
     if settings.overlay_enabled {
-        if !w.is_visible().unwrap_or(false) {
+        if should_reveal(w.is_visible().unwrap_or(false),w.is_minimized().unwrap_or(false)) {
             let _ = w.set_ignore_cursor_events(settings.locked);
             let _ = w.show();
+            crate::music::notify_visibility(app);
         }
-    } else {
+    } else if w.is_visible().unwrap_or(false) {
         let _ = w.hide();
+        crate::music::notify_visibility(app);
     }
     state
         .floating
@@ -193,9 +198,13 @@ pub fn sync(app: &tauri::AppHandle, sample: &Sample, settings: &Settings) {
     );
 }
 
+// Regular sampling must not undo a user's native minimize action.
+fn should_reveal(visible:bool,minimized:bool)->bool {!visible&&!minimized}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test] fn minimized_overlay_is_not_reopened_by_sampler(){assert!(!should_reveal(false,true));assert!(!should_reveal(true,true));assert!(!should_reveal(true,false));assert!(should_reveal(false,false));}
     #[test]
     fn group_contains_only_live_or_recent_tasks_with_primary_stable_and_no_display_ids() {
         let mut root = Sample {

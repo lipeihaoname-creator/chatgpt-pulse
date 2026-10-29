@@ -43,7 +43,7 @@ try{
  await until(()=>probe('sampler').state==='completed','completion');
  assert.equal(probe('sampler').output_tokens,null);
  checks.push('Completion still preserves the unknown task total');
- const report={version:'0.16.6',passed:true,synthetic:true,real_user_data_accessed:false,native_executed:true,checks};
+ const report={version:JSON.parse(fs.readFileSync('package.json','utf8')).version,passed:true,synthetic:true,real_user_data_accessed:false,native_executed:true,checks};
  fs.writeFileSync(path.join(root,'evidence','usage-gap-native-first-usage.json'),JSON.stringify(report,null,2));
  console.log(JSON.stringify(report));
 }finally{if(child.exitCode===null)child.kill();await closed;}

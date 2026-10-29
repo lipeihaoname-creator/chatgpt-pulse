@@ -1,8 +1,10 @@
+音乐候选 0.18.2 新增 Windows-only 的 windows 0.62.2 与 windows-version 0.1.7，版本已锁定。测试用生成的播放输入和隔离 Work，明确同意系统音频采集后可运行 `python scripts/test-windows-music.py --system-audio-confirmed`；不是用户运行依赖。无本地回环网络权限时，可令 PULSE_PLAYWRIGHT_MODULE 指向 tests/local-assets-runtime.mjs 后运行界面测试，直接渲染生产资源。当前验收范围见 [音乐报告](WINDOWS_MUSIC_REPORT.md)。
+
 # Windows 源码构建
 
 用户安装程序不需要下列工具；本页只面向开发者。
 
-需要 Windows x64、Node.js 22.13+、项目指定的 pnpm、Rust MSVC 工具链、Visual Studio C++ Build Tools 与 Windows SDK，以及 WebView2。本机实际验证使用 Rust 1.99.1；Cargo.toml 的 1.88 是声明下限，尚未验证所有锁定依赖在该版本上的兼容性。
+需要 Windows x64、Node.js 22.13+、项目指定的 pnpm、Rust MSVC 工具链、Visual Studio C++ Build Tools 与 Windows SDK，以及 WebView2。Windows 交付机实际验证使用 Rust 1.99.1；Cargo.toml 的 1.88 是声明下限，尚未验证所有锁定依赖在该版本上的兼容性。
 
 ```powershell
 pnpm install --frozen-lockfile
@@ -33,4 +35,6 @@ cargo test --manifest-path src-tauri/Cargo.toml --locked local_metadata_check --
 
 该检查只输出状态、数值及匿名汇总，不输出聊天正文、会话标题或真实会话 ID。开发工具的输出保存在被排除的 `test-results` 内，不应提交到源码仓库。
 
-源码包采用公开文件白名单，并逐项校验解包内容、敏感文件排除规则和 SHA-256。素材相关权利问题仍需单独核查；0.16.6 已公开预发布，未更换许可证或开启自动发布。
+源码包采用公开文件白名单，并逐项校验解包内容、敏感文件排除规则和 SHA-256。发布前仍需处理素材授权；本轮没有更换许可证、上传仓库或开启自动发布。
+
+0.18.2 当前源码已在 Mac 选择性合并；Windows 安装器保留交付时的原始名称、字节和校验值，不在 Mac 上重新封装。窗口和音频公共文件的 Mac 回归不代替 Windows 二进制重建。详情见 [两端整合说明](RELEASE_0.18.2.zh-CN.md)。

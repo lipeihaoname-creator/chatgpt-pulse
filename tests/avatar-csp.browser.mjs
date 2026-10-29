@@ -5,7 +5,7 @@ import {chromium} from './playwright.mjs';
 const browser=await chromium.launch({channel:'chrome',headless:true});const errors=[],checks=[];
 try{
  const page=await browser.newPage({viewport:{width:1160,height:1000}});page.on('pageerror',e=>errors.push(String(e)));
- await page.route('http://127.0.0.1:1420/',async route=>{const response=await route.fetch();await route.fulfill({response,headers:{...response.headers(),'content-security-policy':"img-src 'self' asset: data:"}});});
+ await page.route('http://127.0.0.1:1420/',async route=>{await route.fulfill({body:await readFile('dist/index.html'),contentType:'text/html',headers:{'content-security-policy':"img-src 'self' asset: data:"}});});
  await page.goto('http://127.0.0.1:1420/',{waitUntil:'networkidle'});await page.getByRole('button',{name:'偏好设置'}).click();
  const chooser=page.waitForEvent('filechooser');await page.getByRole('button',{name:'导入图片',exact:true}).click();await (await chooser).setFiles('src-tauri/icons/128x128.png');
  const image=page.getByLabel('外观预览',{exact:true}).getByAltText('自定义头像',{exact:true});

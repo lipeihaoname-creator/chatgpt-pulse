@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>NSAudioCaptureUsageDescription</key>
+<string>仅在本机内存中分析系统播放音频，用于悬浮窗频谱和空闲人物律动。不访问麦克风，不录音保存或上传。</string>
+</dict></plist>

@@ -64,7 +64,7 @@ try:
     assert row.get('received_session_count') == 3, 'Root receives only the visible secondary task metadata'
     assert probe('windows').get('tasks') == {}, 'No independent windows can drift away from the character'
     scale = row['size'][2]
-    expected_height = 300 if '--combined' in sys.argv else 344
+    expected_height = 318 if '--combined' in sys.argv else 362
     assert abs(row['size'][0]/scale - 280) < 1 and abs(row['size'][1]/scale - expected_height) < 1
     initial = dict(position=row['position'],outputs=rendered(),size=row['size'])
     for name in names[:2]:

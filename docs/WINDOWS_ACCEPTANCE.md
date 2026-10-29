@@ -21,8 +21,6 @@
 
 两种安装器主程序完全相同；新包完整离线版约 226.46 MiB、联网版约 20.62 MiB。微软完整运行时与前轮同一 SHA-256，Microsoft 有效签名已重新核对。
 
-公开发布状态更新（2026-10-27）：[v0.16.6](https://github.com/voidlph-dev/chatgpt-pulse/releases/tag/v0.16.6) 已于 2026-10-25 公开预发布。下文 0.16.5 的“未上传”描述仅记录当时状态。后续步骤见 [Windows 发布复核清单](WINDOWS_RELEASE_CHECKLIST.md)。
-
 本版仍未进行 Windows 10、异机或缺少 WebView2 的干净系统验收。当前未签名、素材授权及源码公开许可边界沿用 [发行准备](RELEASE_READINESS.md)。
 
 ---

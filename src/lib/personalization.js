@@ -22,7 +22,7 @@ export function moveCrop(value,dx,dy,width,height,size){
  return cleanCrop({...c,x:c.x-(width*scale-size>0?dx*100/(width*scale-size):0),y:c.y-(height*scale-size>0?dy*100/(height*scale-size):0)});
 }
 export function shouldCollapse(settings,work,{docked=false,locked=true,gripActive=false,dragging=false,talking=false,elapsed=0}={}){
- return settings.idle_collapse&&docked&&locked&&!gripActive&&!dragging&&!talking&&elapsed>=15000&&['paused','waiting','completed','aborted'].includes(work.key);
+ return settings.idle_collapse&&docked&&locked&&!dragging&&!talking&&elapsed>=15000&&['paused','waiting','completed','aborted'].includes(work.key);
 }
 export function completionScene(){
  const seen=new Set();

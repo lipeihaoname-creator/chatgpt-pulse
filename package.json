@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-pulse",
-  "version": "0.16.6",
+  "version": "0.18.2",
   "private": true,
   "type": "module",
   "scripts": {

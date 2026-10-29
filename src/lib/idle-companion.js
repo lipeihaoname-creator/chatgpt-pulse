@@ -3,11 +3,12 @@ export function isCompanionIdle(sample,work,clock=Date.now()){
  return sample.source==='logs'&&['waiting','completed','aborted'].includes(work.key)&&Number.isFinite(sample.checked_at)&&clock-sample.checked_at>=-1000&&clock-sample.checked_at<5000&&!(sample.sessions||[]).some(s=>s.state==='running'||s.task_unfinished||s.state==='loading');
 }
 export function idleDirector(random=Math.random){
- let chatAt=null,motionAt=null,lastTick=null,resumeAt=null,held=false;const safe=()=>{const n=random();return Number.isFinite(n)?Math.max(0,Math.min(.999999,n)):0;};
- const wait=(type,frequency)=>{const [lo,hi]=type==='motion'?[18000,48000]:frequency==='quiet'?[180000,420000]:frequency==='lively'?[45000,130000]:[90000,240000];return lo+safe()*(hi-lo);};
- return {reset(){chatAt=motionAt=lastTick=resumeAt=null;held=false;},defer(now,frequency){chatAt=now+wait('chat',frequency);motionAt=now+wait('motion',frequency);},tick({now,eligible,chat,motion,busy=false,suppressed=false,frequency='balanced'}){
-  const elapsed=lastTick===null?0:now-lastTick,wake=elapsed<0||elapsed>15000;lastTick=now;
+ let chatAt=null,motionAt=null,lastTick=null,resumeAt=null,held=false,musicMode=false,resetCount=0,ticks=0;const safe=()=>{const n=random();return Number.isFinite(n)?Math.max(0,Math.min(.999999,n)):0;};
+ const wait=(type,frequency)=>{const [lo,hi]=type==='motion'?[18000,48000]:frequency==='quiet'?[180000,420000]:frequency==='lively'?[45000,130000]:[90000,240000];const range=type==='chat'&&musicMode?(frequency==='quiet'?[90000,240000]:frequency==='lively'?[22000,55000]:[45000,105000]):[lo,hi];return range[0]+safe()*(range[1]-range[0]);};
+ return {inspect(){return {chatAt,motionAt,lastTick,resumeAt,held,musicMode,resetCount,ticks};},reset(){resetCount++;chatAt=motionAt=lastTick=resumeAt=null;held=false;},defer(now,frequency){chatAt=now+wait('chat',frequency);motionAt=now+wait('motion',frequency);},tick({now,eligible,chat,motion,busy=false,suppressed=false,frequency='balanced',music=false}){
+  ticks++;const elapsed=lastTick===null?0:now-lastTick,wake=elapsed<0||elapsed>15000;lastTick=now;
   if(!eligible||wake){chatAt=motionAt=resumeAt=null;held=false;return null;}
+  if(!!music!==musicMode){musicMode=!!music;chatAt=null;}
   if(!chat)chatAt=null;else if(chatAt===null)chatAt=now+wait('chat',frequency);
   if(!motion)motionAt=null;else if(motionAt===null)motionAt=now+wait('motion',frequency);
   // Brief pointer interactions pause the remaining wait instead of starving it.

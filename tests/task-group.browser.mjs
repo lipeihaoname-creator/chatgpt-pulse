@@ -3,7 +3,7 @@ import {defaults,emptySample} from '../src/lib/domain.js';
 import {chromium} from './playwright.mjs';
 const browser=await chromium.launch({channel:'chrome',headless:true}),errors=[],checks=[];
 try{
- const context=await browser.newContext({viewport:{width:280,height:344}});
+ const context=await browser.newContext({viewport:{width:280,height:362}});
  await context.addInitScript(({base,initial})=>{
   globalThis.isTauri=true;let n=0,seq=0,settings=initial,count=4,primary='a',output=40;const callbacks=new Map(),listeners=new Map();
   const snapshot=()=>{const rows=Array.from({length:count},(_,i)=>({...base,log_id:String.fromCharCode(97+i),state:'running',activity_status:i%2?'tool':'reasoning',activity_at:Date.now(),checked_at:Date.now(),current_rate:10*(i+1),rate_status:'reported_interval',rate_updated_at:Date.now(),output_tokens:i===1?output:(i+1)*20}));return {...rows.find(r=>r.log_id===primary),overlay_log_id:primary,sessions:rows,monitored_sessions:count,checked_at:Date.now(),poll_sequence:++seq};};
@@ -20,15 +20,15 @@ try{
  assert.equal(await page.locator('.pet-face').count(),1);assert.equal(await page.locator('.pet-bubble').count(),4);assert.ok(!/Work|…|jsonl/.test(await page.locator('.mini').innerText()));
  let rects=await page.locator('.pet-bubble').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height};}));
  assert.ok(rects.every(r=>Math.abs(r.x-126)<1));for(let i=1;i<rects.length;i++)assert.ok(rects[i].y>=rects[i-1].y+rects[i-1].h+7);
- assert.ok(rects.at(-1).y+rects.at(-1).h<=344);await page.screenshot({path:'test-results/task-group-separate.png'});
+ assert.ok(rects.at(-1).y+rects.at(-1).h<=362);await page.screenshot({path:'test-results/task-group-separate.png'});
  checks.push('Four attached bubbles align under the original, share one avatar and show separate usage without Work IDs');
  await page.evaluate(()=>window.dockRight());await page.waitForTimeout(80);assert.ok(Math.abs((await page.locator('.pet-bubble').first().boundingBox()).x-10)<1);await page.screenshot({path:'test-results/task-group-right.png'});
- await page.evaluate(()=>window.changeGroup({task_display:'combined'}));await page.setViewportSize({width:280,height:300});await page.waitForTimeout(80);
+ await page.evaluate(()=>window.changeGroup({task_display:'combined'}));await page.setViewportSize({width:280,height:318});await page.waitForTimeout(80);
  assert.equal(await page.locator('.mini.combined').count(),1);assert.equal(await metrics.count(),4);assert.equal(await page.locator('.pet-face').count(),1);
- let geometry=await page.locator('.pet-bubbles').evaluate(el=>({h:el.clientHeight,scroll:el.scrollHeight,b:el.getBoundingClientRect().bottom}));assert.ok(geometry.scroll<=geometry.h+1,JSON.stringify(geometry));assert.ok(geometry.b<=300);
+ let geometry=await page.locator('.pet-bubbles').evaluate(el=>({h:el.clientHeight,scroll:el.scrollHeight,b:el.getBoundingClientRect().bottom}));assert.ok(geometry.scroll<=geometry.h+1,JSON.stringify(geometry));assert.ok(geometry.b<=318);
  await page.screenshot({path:'test-results/task-group-combined.png'});
  await page.evaluate(()=>window.changeTasks(4,120));await page.waitForTimeout(50);assert.equal(await metrics.nth(1).getAttribute('data-task-output'),'120');assert.equal(await metrics.first().getAttribute('data-task-output'),'20');checks.push('Combined mode keeps every task metric independent and fits the native height');
- await page.evaluate(()=>window.changeGroup({locked:false}));await page.setViewportSize({width:280,height:340});await page.waitForTimeout(50);
+ await page.evaluate(()=>window.changeGroup({locked:false}));await page.setViewportSize({width:280,height:358});await page.waitForTimeout(50);
  const actions=await page.getByRole('group',{name:'编辑操作'}).boundingBox();geometry=await page.locator('.pet-bubbles').evaluate(el=>({bottom:el.getBoundingClientRect().bottom}));assert.ok(geometry.bottom<=actions.y,JSON.stringify({geometry,actions}));await page.getByRole('button',{name:'取消',exact:true}).click();assert.equal(await page.getByRole('group',{name:'编辑操作'}).count(),0);
  await page.evaluate(()=>window.changeTasks(1));await page.setViewportSize({width:280,height:128});await page.waitForTimeout(50);assert.equal(await page.locator('.mini.multitask').count(),0);assert.equal(await metrics.count(),1);assert.equal(await page.locator('.pet-face').count(),1);checks.push('Cancel exits editing; shrinking to one task restores the original compact layout');
  await page.evaluate(()=>{window.changeGroup({locked:false,task_display:'separate'});window.changeTasks(16);});await page.setViewportSize({width:280,height:500});await page.waitForTimeout(60);geometry=await page.locator('.pet-bubbles').evaluate(el=>({h:el.clientHeight,scroll:el.scrollHeight}));assert.ok(geometry.scroll>geometry.h);await page.locator('.pet-bubbles').evaluate(el=>el.scrollTop=el.scrollHeight);assert.ok(await metrics.last().isVisible());checks.push('Large task lists scroll within the screen in edit mode instead of spawning detached windows');

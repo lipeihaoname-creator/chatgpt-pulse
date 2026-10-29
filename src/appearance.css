@@ -86,7 +86,6 @@
 .pet-particle{position:absolute;left:0;top:0;width:var(--particle-size);height:calc(var(--particle-size)*1.25);offset-anchor:center;offset-rotate:0deg;opacity:0;animation:pet-particle-flight var(--flight) linear var(--phase) infinite;pointer-events:none}
 .pet-particle svg{display:block;width:100%;height:100%;transform:rotate(var(--tilt))}
 @keyframes pet-particle-flight{0%{offset-distance:0%;opacity:0;transform:scale(.65)}18%{opacity:.65}55%{opacity:.8;transform:scale(1)}84%{opacity:.35}100%{offset-distance:100%;opacity:0;transform:scale(.5)}}
-.pet-face:has(.particle-field)>.pet-orbit{display:none}
 .pet-monitor:not(.avatar-layout):not(.multitask) .mini-grip{position:relative}
 .pet-monitor:not(.avatar-layout) .status-accessory.particle-field{left:0;top:4px;transform:scale(.34);transform-origin:top left}
 .pet-monitor:not(.avatar-layout) .pet-particle{width:18px;height:22px}
@@ -103,3 +102,21 @@
 .pet-monitor .mini-grip:focus-visible{outline:2px solid #d8dcdf;outline-offset:-2px}
 
 .source-status{display:flex;flex-direction:column;gap:6px;padding:13px 16px;margin-bottom:18px;border:1px solid #796540;border-radius:8px;background:#302b20;color:#e0d4b7;font-size:12px;line-height:1.6}.source-status small{color:#b9ac8e}
+
+/* Compact spectrum geometry follows the unchanged portrait center.
+   Work particles keep their paths; the spectrum alone clears their lower edge. */
+.pet-monitor.music-space:not(.multitask){height:80px;align-items:flex-start}
+.pet-monitor.music-space:not(.avatar-layout):not(.multitask)>.mini-grip{margin-top:2px}
+.pet-monitor.music-space.avatar-layout:not(.multitask){height:144px}
+.pet-monitor.music-space.editing:not(.avatar-layout):not(.multitask){height:120px}
+.pet-monitor.music-space.avatar-layout.editing:not(.multitask){height:184px}
+.pet-monitor.music-space:not(.avatar-layout).editing .mini-edit-actions{top:83px}
+.pet-monitor.music-space.avatar-layout.editing .mini-edit-actions{top:144px}
+.pet-monitor.music-space.multitask.editing .mini-edit-actions{top:auto}
+
+/* Bubbles follow the fixed portrait center; hover alone never opens a collapsed bubble. */
+.pet-monitor.avatar-layout:not(.bubble-only)>.pet-bubbles{position:absolute;top:var(--bubble-top,26px);left:126px;right:10px;align-self:flex-start}
+.pet-monitor.avatar-layout:not(.bubble-only).docked-right>.pet-bubbles{left:10px;right:126px}
+.pet-monitor.avatar-layout .pet-bubble:before{top:calc(50% - 5px)}
+.pet-monitor.avatar-layout.multitask>.pet-bubbles{max-height:calc(100vh - var(--bubble-top,26px) - 8px)}
+.pet-monitor.avatar-layout.multitask.editing>.pet-bubbles{max-height:calc(100vh - var(--bubble-top,26px) - 48px)}
