@@ -1,6 +1,16 @@
 # Windows 安装与音乐律动
 
-当前 Windows 音乐候选：0.18.2 x64。以随包 `WINDOWS_MUSIC_REPORT.md` 的实际验收范围为准；不是 GitHub 正式 Release。
+当前公开测试版：0.18.2 x64。安装器保持 Windows 交接验收的原字节；实际验收范围见随包 `WINDOWS_MUSIC_REPORT.md`。仓库后续共享窗口维护已通过云端编译，但未回编进入这些原安装器。
+
+## 下载与校验
+
+[ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe)
+
+[ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe)
+
+[SHA256SUMS.txt](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/SHA256SUMS.txt)
+
+在 PowerShell 执行 `Get-FileHash -Algorithm SHA256 .\下载的安装包.exe`，将结果与 SHA256SUMS.txt 中同名文件比较。
 
 ## 选择安装器
 
@@ -29,4 +39,4 @@ Token 直接来自日志，不估算、不额外派发模型任务。没有任�
 
 使用 Windows“已安装的应用”或安装目录中的卸载器。默认保留用户数据；不要为了排查问题手动删除设置目录。安装器和源包不携带个人日志、凭据或设置数据库。
 
-现有非商用许可与素材说明保持不变，完整文本和第三方许可随程序及源码提供。本轮没有自动向 GitHub 推送或发布。异机、物理音频设备切换和独立标准用户账户等未测项，以随包报告为准。
+现有非商用许可与素材说明保持不变，完整文本和第三方许可随程序及源码提供。安装器从 GitHub 0.18.2 Release 下载，源码与安装器的来源分别见发布说明。异机、物理音频设备切换和独立标准用户账户等未测项，以随包报告为准。

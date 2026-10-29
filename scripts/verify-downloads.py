@@ -47,14 +47,17 @@ def verify(tag):
     if not re.fullmatch(r'v\d+\.\d+\.\d+', tag):
         raise ValueError('Use an explicit version tag, for example v0.16.6')
     base = f'https://github.com/{REPOSITORY}/releases/download/{tag}/'
-    names = [f'ChatGPT-Pulse-{version}-windows-x64-setup.exe',
-             f'ChatGPT-Pulse-{version}-windows-x64-online-setup.exe']
-    with request(f'https://api.github.com/repos/{REPOSITORY}/releases/tags/{tag}', api=True) as response:
+    with request(f'https://api.github.com/{REPOSITORY}/releases/tags/{tag}', api=True) as response:
         release = json.loads(response.read(2 * 1024 * 1024))
+    music = any(a['name'].startswith(f'ChatGPT-Pulse-{version}-windows-x64-music-') for a in release['assets'])
+    names = [f'ChatGPT-Pulse-{version}-windows-x64-music-offline-setup.exe',
+             f'ChatGPT-Pulse-{version}-windows-x64-music-online-setup.exe'] if music else [
+             f'ChatGPT-Pulse-{version}-windows-x64-setup.exe', f'ChatGPT-Pulse-{version}-windows-x64-online-setup.exe']
+    manifest_name = 'SHA256SUMS.txt' if any(a['name']=='SHA256SUMS.txt' for a in release['assets']) else 'SHA256SUMS'
     if release['draft'] or release['tag_name'] != tag:
         raise ValueError('Release must be public and match the requested tag')
     assets = {}
-    for name in [*names, 'SHA256SUMS']:
+    for name in [*names, manifest_name]:
         matches = [asset for asset in release['assets'] if asset['name'] == name]
         if len(matches) != 1 or matches[0]['state'] != 'uploaded':
             raise ValueError('Missing or incomplete asset: ' + name)
@@ -63,17 +66,20 @@ def verify(tag):
             raise ValueError('Unexpected download path: ' + name)
         assets[name] = asset
     root = Path(__file__).resolve().parent.parent
-    for document in ['README.md', 'README.en.md', 'docs/WINDOWS_INSTALL.md', f'docs/RELEASE_{version}.zh-CN.md']:
+    documents = [f'docs/RELEASE_{version}.zh-CN.md']
+    if version == json.loads((root/'package.json').read_text())['version']:
+        documents += ['README.md', 'README.en.md', 'docs/WINDOWS_INSTALL.md']
+    for document in documents:
         text = (root / document).read_text(encoding='utf-8')
         for name in assets:
             if '](' + base + name + ')' not in text:
                 raise ValueError(f'Missing direct link in {document}: {name}')
     with tempfile.TemporaryDirectory(prefix='pulse-release-') as directory:
         directory = Path(directory)
-        manifest = directory / 'SHA256SUMS'
-        if assets['SHA256SUMS']['size'] > 1024 * 1024:
+        manifest = directory / manifest_name
+        if assets[manifest_name]['size'] > 1024 * 1024:
             raise ValueError('Checksum manifest is too large')
-        download(assets['SHA256SUMS'], manifest)
+        download(assets[manifest_name], manifest)
         checksums = {}
         for line in manifest.read_text(encoding='utf-8-sig').splitlines():
             match = re.fullmatch(r'([0-9a-fA-F]{64})\s+\*?(.+)', line)
@@ -96,7 +102,7 @@ def verify(tag):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--tag', default='v0.16.6')
+    parser.add_argument('--tag', default='v'+json.loads((Path(__file__).resolve().parents[1]/'package.json').read_text())['version'])
     arguments = parser.parse_args()
     try:
         verify(arguments.tag)

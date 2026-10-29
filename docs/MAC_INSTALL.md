@@ -1,6 +1,6 @@
-# Mac 安装 · 0.18.2 合并候选
+# Mac 安装 · 0.18.2
 
-取得经校验的 `ChatGPT-Pulse-0.18.2-mac-universal.dmg`（合并候选资产，尚未发布），双击打开，将 **ChatGPT Pulse** 拖到 **Applications（应用程序）** 图标。复制完成后推出磁盘映像，从应用程序中启动。
+取得经校验的 `ChatGPT-Pulse-0.18.2-mac-universal.dmg`（从 0.18.2 Release 下载），双击打开，将 **ChatGPT Pulse** 拖到 **Applications（应用程序）** 图标。复制完成后推出磁盘映像，从应用程序中启动。
 
 也可将应用放到当前用户的 `~/Applications`，方便没有系统应用目录写入权限的用户。无需 Node、Rust、Python、VS Code 或完整 Xcode。不要长期直接从只读 DMG 中运行；启动联动应在复制完成后启用。
 
@@ -22,6 +22,12 @@ Pulse 读取当前用户的兼容 Work / Codex 本地日志，默认 `~/.codex/s
 
 代码许可为 PolyForm Noncommercial 加内部使用附加许可。项目为非官方、非商业同人项目；原角色相关权利归各自权利人所有，代码许可不授予这些角色素材的相关权利，不表示获得官方授权或背书。
 
-## 音乐候选身份与升级
+## 音乐版升级
 
-当前本机音乐候选沿用 `io.github.chatgptpulse.musicpreview`，以保留已有音乐设置及系统音频许可；软件名称仍为 ChatGPT Pulse。默认通用源码配置的 `io.github.chatgptpulse.desktop` 和早期桌面版属于另一身份。候选覆盖同身份已验证；不同历史身份之间的设置迁移、系统许可迁移及第二台 Mac 首装尚未验证，不应声称已经无缝升级。用户数据不会随卸载候选自动删除。公开前需决定正式身份并完成对应升级验收。
+本次 Mac 发布沿用已验收的 `io.github.chatgptpulse.musicpreview`，软件名称仍为 ChatGPT Pulse。
+
+- 已使用音乐版：退出旧应用后覆盖安装，保留同身份设置和已有音频授权。
+- 从 0.16.6 桌面版升级：退出旧 Pulse 后覆盖应用。音乐版使用独立设置目录，需要重新选择偏好、启用音频并按系统提示授权。旧 `desktop` 身份的数据保留，不自动导入或删除；不要将此路径描述为无缝迁移。
+- 先不要删除旧设置。需要回退时可下载历史 0.16.6 Release；两种身份的设置相互独立。
+
+公开源码的默认配置仍为桌面身份；构建与本发布附件相同身份的 Mac 应用请运行 `sh scripts/build-music-preview.sh`。该命名源自早期开发阶段，不表示需要另装一个程序。Intel/异机与自动跨身份迁移仍未验收。

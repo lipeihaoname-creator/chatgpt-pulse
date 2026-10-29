@@ -39,7 +39,7 @@ class ReleaseDownloadsTests(unittest.TestCase):
 
     def verify(self):
         with patch.object(release_check, 'request', side_effect=self.response), contextlib.redirect_stdout(io.StringIO()):
-            release_check.verify('v0.16.6')
+            release_check.verify(self.release['tag_name'])
 
     def test_complete_downloads_match_metadata_manifest_and_document_links(self):
         self.verify()
@@ -67,6 +67,22 @@ class ReleaseDownloadsTests(unittest.TestCase):
         self.update_assets()
         with self.assertRaisesRegex(ValueError, 'Invalid or duplicate checksum'):
             self.verify()
+
+
+class MusicReleaseDownloadsTests(ReleaseDownloadsTests):
+    def setUp(self):
+        super().setUp()
+        self.base = f'https://github.com/{release_check.REPOSITORY}/releases/download/v0.18.2/'
+        self.payloads = {
+            'ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe': b'MZoffline-fixture',
+            'ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe': b'MZonline-fixture',
+        }
+        self.payloads['SHA256SUMS.txt'] = ''.join(hashlib.sha256(body).hexdigest()+'  '+name+'\n' for name,body in self.payloads.items()).encode()
+        self.release['tag_name']='v0.18.2';self.update_assets()
+
+    def test_duplicate_checksum_entries_are_rejected(self):
+        self.payloads['SHA256SUMS.txt'] *= 2;self.update_assets()
+        with self.assertRaisesRegex(ValueError,'Invalid or duplicate checksum'):self.verify()
 
 
 if __name__ == '__main__':
