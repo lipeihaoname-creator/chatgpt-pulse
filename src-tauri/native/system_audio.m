@@ -8,6 +8,7 @@
 #include <stdatomic.h>
 #include <math.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define PULSE_CAPACITY 32768u
 typedef struct {
@@ -76,6 +77,16 @@ static OSStatus consume(AudioObjectID device, const AudioTimeStamp *now,
     atomic_store_explicit(&s->write, write, memory_order_release);
     return noErr;
 }
+// Creation is asynchronous: wait off the UI/audio threads before registering IO.
+static bool wait_until_alive(AudioObjectID device) {
+    AudioObjectPropertyAddress property = address(kAudioDevicePropertyDeviceIsAlive);
+    for (int attempt = 0; attempt < 100; attempt++) {
+        UInt32 alive = 0, size = sizeof(alive);
+        if (AudioObjectGetPropertyData(device, &property, 0, NULL, &size, &alive) == noErr && alive) return true;
+        usleep(20000);
+    }
+    return false;
+}
 int32_t pulse_audio_supported(void) {
     if (@available(macOS 14.2, *)) return 1;
     return 0;
@@ -124,6 +135,7 @@ void *pulse_audio_open(int32_t *error) {
             result = AudioHardwareCreateAggregateDevice((__bridge CFDictionaryRef)composition, &s->device);
         }
         if (result != noErr) goto failed;
+        if (!wait_until_alive(s->device)) { result = -6; goto failed; }
         result = AudioDeviceCreateIOProcID(s->device, consume, s, &s->proc);
         if (result != noErr) goto failed;
         s->output = default_output();

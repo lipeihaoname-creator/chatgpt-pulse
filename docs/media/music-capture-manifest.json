@@ -1,0 +1,48 @@
+{
+  "version": "0.18.3",
+  "date": "2026-10-30",
+  "platform": "macOS native packaged Tauri application",
+  "capture": "WKWebView own-surface snapshots, no desktop capture or browser simulation",
+  "audio": "Actual Core Audio process tap of generated test playback; no captured audio saved",
+  "work_data": "Empty isolated log fixtures; status is waiting, not a model benchmark",
+  "processing": "Uniform resize, alpha compositing onto solid background, global-palette GIF encoding; no generated or retouched UI",
+  "binary_sha256": "c454294ac86f0dd77f17194579949c5b3eeac6bf6334b7e908220b482bf9be04",
+  "files": [
+    {
+      "file": "music-mai-arc-macos.gif",
+      "bytes": 2351514,
+      "sha256": "d53f286179ade9e32c94223c569a6db8ee1e420b3c4c967e76da4875fa18cbe6",
+      "frames": 80,
+      "fps": 10,
+      "character": "mai",
+      "spectrum_style": "arc"
+    },
+    {
+      "file": "music-mai-arc-macos.png",
+      "bytes": 74876,
+      "sha256": "853e9c95c2045faed7a2a94511f9b00cb6cb5e7efc71bf5e7d6ae85cdc3798d9",
+      "frames": 1,
+      "fps": null,
+      "character": "mai",
+      "spectrum_style": "arc"
+    },
+    {
+      "file": "music-roxy-bars-macos.gif",
+      "bytes": 2407857,
+      "sha256": "957fd90af0ca2515b3a9b43621ecd206c68a7826eff1a7309ce6a76bbabb4d4a",
+      "frames": 80,
+      "fps": 10,
+      "character": "roxy",
+      "spectrum_style": "bars"
+    },
+    {
+      "file": "music-roxy-bars-macos.png",
+      "bytes": 78091,
+      "sha256": "eaf5715e4018ea7b0a86ccb9489a588a0cbeee53f4b26661fc6af94cffb0a601",
+      "frames": 1,
+      "fps": null,
+      "character": "roxy",
+      "spectrum_style": "bars"
+    }
+  ]
+}

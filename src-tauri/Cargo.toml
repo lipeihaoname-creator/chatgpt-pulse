@@ -1,6 +1,6 @@
 [package]
 name = "chatgpt-pulse"
-version = "0.18.2"
+version = "0.18.3"
 description = "Local-first Codex/Work log usage dashboard"
 edition = "2021"
 rust-version = "1.88"

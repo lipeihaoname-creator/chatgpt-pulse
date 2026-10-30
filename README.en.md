@@ -4,6 +4,16 @@
 
 A lightweight desktop monitor for compatible local Work / Codex logs on macOS and Windows. Shows task state, reported token usage and report-interval rates, with a compact bar or character overlay. Built with Tauri 2, Rust, Svelte and SQLite.
 
+## Music capture demo (macOS 0.18.3)
+
+Real Core Audio capture drives the native app under generated test playback. Only the app's own WebView is recorded; there is no desktop capture or real chat. Waiting Token values are not a model benchmark.
+
+| Mai · half arc | Roxy · bars |
+|---|---|
+| <img src="docs/media/music-mai-arc-macos.gif" width="420" alt="Native Mac Mai and half-arc spectrum under actual system audio"> | <img src="docs/media/music-roxy-bars-macos.gif" width="420" alt="Native Mac Roxy and spectrum bars under actual system audio"> |
+
+[Capture provenance](docs/media/music-capture-manifest.json) · [Startup fix and validation](docs/MAC_AUDIO_STARTUP_0.18.3.md)
+
 ## Native demos
 
 Captured from the **0.16.6 Mac desktop application**, using the built-in demo or isolated synthetic log fixtures. Numbers illustrate the interface, not real model performance. No real conversations are shown. See the [full gallery and capture notes](docs/DEMOS.md).
@@ -31,15 +41,15 @@ Captured from the **0.16.6 Mac desktop application**, using the built-in demo or
 
 ## Downloads and support
 
-Latest public test version: **0.18.2**. Downloads are provided through [GitHub Releases](https://github.com/voidlph-dev/chatgpt-pulse/releases/tag/v0.18.2).
+Latest macOS fix: **0.18.3**; Windows remains the validated **0.18.2** music build. Downloads are provided through [GitHub Releases](https://github.com/voidlph-dev/chatgpt-pulse/releases/tag/v0.18.3).
 
 | Platform | Package | Verification scope |
 |---|---|---|
-| macOS 13.3+ | [`ChatGPT-Pulse-0.18.2-mac-universal.dmg`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/ChatGPT-Pulse-0.18.2-mac-universal.dmg) | Universal Apple Silicon / Intel binary; see [Mac acceptance](docs/MAC_ACCEPTANCE.md) for actual tests |
+| macOS 13.3+ | [`ChatGPT-Pulse-0.18.3-mac-universal.dmg`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/ChatGPT-Pulse-0.18.3-mac-universal.dmg) | Universal Apple Silicon / Intel binary; see [Mac acceptance](docs/MAC_ACCEPTANCE.md) for actual tests |
 | Windows x64 | [`ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe) | Offline installer including WebView2 setup; tested on the handoff machine only |
 | Windows x64, online | [`ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe) | Smaller alternative; internet needed for missing WebView2 |
 
-Checksums: [SHA256SUMS](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/SHA256SUMS.txt). See the [Windows verification steps](docs/WINDOWS_INSTALL.md#下载与校验).
+Checksums: [SHA256SUMS](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/SHA256SUMS.txt). See the [Windows verification steps](docs/WINDOWS_INSTALL.md#下载与校验).
 
 On macOS, open the DMG and drag the app to Applications. On Windows, install one of the two EXEs. End users do not need Node.js, Rust, Python or a development server. The Mac candidate is ad hoc signed and not notarized; Windows installers are unsigned. Check [Mac installation](docs/MAC_INSTALL.md) or [Windows installation](docs/WINDOWS_INSTALL.md) before testing.
 

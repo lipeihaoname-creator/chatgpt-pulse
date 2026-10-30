@@ -82,12 +82,25 @@ pub fn notify_visibility(app:&tauri::AppHandle) {
     let music=app.state::<Music>();let frame=music.snapshot();publish(app,&music.0,frame,true);
 }
 
+// A new tap can deliver healthy callbacks containing only zero PCM. We cannot
+// infer audible playback or permission from that; try only two full warm-up
+// reconnects, then accept real silence. Once any real PCM arrives, never reset a
+// healthy tap for silence. Re-enabling starts a new bounded warm-up lifecycle.
+#[derive(Default)]
+struct StartupWarmup { signal_seen:bool, reconnects:u8 }
+impl StartupWarmup {
+    fn reconnect(&mut self,nonzero:bool,age:Duration)->bool {
+        self.signal_seen |= nonzero;
+        if self.signal_seen || self.reconnects>=2 || age<Duration::from_secs(2) {return false;}
+        self.reconnects+=1;true
+    }
+}
 fn capture(app:tauri::AppHandle,inner:Arc<Inner>,epoch:u64) {
     let mut stream:Option<native::Stream>=None;
     let mut analyzer=Analyzer::default();let mut pcm=[0f32;8192];
     let mut last=Instant::now();let mut health=last;let mut last_data=last;
     let mut connected=last;let mut sequence=0;let mut failures=0;
-    let mut previous=String::new();let mut callbacks=0;
+    let mut previous=String::new();let mut callbacks=0;let mut warmup=StartupWarmup::default();
     while inner.wanted.load(Ordering::SeqCst)&&inner.epoch.load(Ordering::SeqCst)==epoch {
         if stream.is_none() {
             match native::Stream::open() {
@@ -118,7 +131,16 @@ fn capture(app:tauri::AppHandle,inner:Arc<Inner>,epoch:u64) {
         if discontinuity {analyzer=Analyzer::default();}
         if connected.elapsed()>Duration::from_secs(5){failures=0;}
         if count>0 {analyzer.push(&pcm[..count]);last_data=Instant::now();}
-        pcm.fill(0.);sequence+=1;
+        let nonzero=pcm[..count].iter().any(|v|v.is_finite()&&*v!=0.);
+        pcm.fill(0.);
+        if cfg!(target_os="macos") && warmup.reconnect(nonzero,connected.elapsed()) {
+            // Drop both native objects on their owner worker, not the UI thread.
+            stream.take();analyzer=Analyzer::default();
+            publish(&app,&inner,AudioFrame::status("recovering","正在确认系统音频连接",true,epoch),true);
+            if !retry_wait(&inner,epoch,Duration::from_millis(150)){return;}
+            continue;
+        }
+        sequence+=1;
         let features=analyzer.analyze(rate as f32,dt,count>0);
         // A Windows loopback stream can remain healthy without packets for any
         // length of silence. Only Mac's callback contract uses this watchdog.
@@ -145,7 +167,7 @@ fn retry_wait(inner:&Inner,epoch:u64,delay:Duration)->bool {
 }
 fn capture_failure(app:&tauri::AppHandle,inner:&Inner,epoch:u64,error:CaptureError,failures:&mut u32)->bool {
     publish(app,inner,AudioFrame::status(error.status,&error.detail,native::supported(),epoch),true);
-    if !cfg!(target_os="windows")||!error.retry{return false;}
+    if !error.retry || cfg!(target_os="macos")&&*failures>=2{return false;}
     *failures=failures.saturating_add(1);retry_wait(inner,epoch,retry_delay(*failures))
 }
 
@@ -161,21 +183,30 @@ mod native {
         fn pulse_audio_healthy(stream:*mut c_void)->i32;
     }
     pub fn supported()->bool {unsafe {pulse_audio_supported()!=0}}
-    pub struct Stream(*mut c_void);
+    pub struct Stream(*mut c_void,bool);
     impl Stream {
         pub fn open()->Result<Self,CaptureError> {
             let mut error=0;let stream=unsafe {pulse_audio_open(&mut error)};
-            if !stream.is_null(){return Ok(Self(stream));}
+            if !stream.is_null(){
+                // Numeric-only fault injection for an explicitly isolated native
+                // regression. Normal user sessions can never enable this path.
+                static OPENS:std::sync::atomic::AtomicUsize=std::sync::atomic::AtomicUsize::new(0);
+                let first=OPENS.fetch_add(1,std::sync::atomic::Ordering::SeqCst)==0;
+                let injected=first&&["PULSE_OFFLINE_TEST","PULSE_RENDER_PROBE","PULSE_TEST_FIRST_AUDIO_ZERO"].iter().all(|k|std::env::var_os(k).is_some());
+                return Ok(Self(stream,injected));
+            }
             let (status,detail)=match error {
                 -1=>("unsupported","音乐律动需要 macOS 14.2 或更新版本"),
                 -2=>("unavailable","请使用带音频权限说明的 Mac 应用包启动，不能直接运行开发二进制"),
                 1885696621=>("permission_denied","系统音频录制未获允许；请在系统设置中检查 Pulse 的音频录制权限后重试"),
                 -5=>("unavailable","当前音频设备的数据格式暂不支持"),
+                -6=>("recovering","系统音频设备尚未就绪，正在重试"),
                 _=>("unavailable","系统音频启动失败；请检查录制权限和音频输出设备后重试"),
             };
-            Err(CaptureError {status,detail:format!("{detail}（{error}）"),retry:false})
+            Err(CaptureError {status,detail:format!("{detail}（{error}）"),retry:error==-6})
         }
-        pub fn read(&mut self,pcm:&mut[f32])->Result<ReadResult,CaptureError> {let mut rate=0.;let mut calls=0;let count=unsafe {pulse_audio_read(self.0,pcm.as_mut_ptr(),pcm.len() as u32,&mut rate,&mut calls)};Ok(ReadResult {count:count as usize,rate,callbacks:calls,discontinuity:false})}
+        pub fn read(&mut self,pcm:&mut[f32])->Result<ReadResult,CaptureError> {let mut rate=0.;let mut calls=0;let count=unsafe {pulse_audio_read(self.0,pcm.as_mut_ptr(),pcm.len() as u32,&mut rate,&mut calls)};if self.1 {pcm[..count as usize].fill(0.);}
+            Ok(ReadResult {count:count as usize,rate,callbacks:calls,discontinuity:false})}
         pub fn healthy(&self)->bool {unsafe {pulse_audio_healthy(self.0)!=0}}
     }
     impl Drop for Stream {fn drop(&mut self){unsafe {pulse_audio_close(self.0)}}}
@@ -222,6 +253,17 @@ pub fn confirmed_idle(sample:&crate::data::Sample,now:i64,since:i64)->bool {
 mod tests {
     use super::*;use crate::data::Sample;
     fn ended()->Sample {Sample {music_scan_complete:true,state:"completed".into(),source:"logs".into(),log_id:Some("a.jsonl".into()),checked_at:Some(4000),activity_at:Some(1000),..Sample::default()}}
+    #[test] fn cold_zero_pcm_retries_are_bounded_and_stop_after_real_data() {
+        let mut warmup=StartupWarmup::default();
+        assert!(!warmup.reconnect(false,Duration::from_millis(1999)));
+        assert!(warmup.reconnect(false,Duration::from_secs(2)));
+        assert!(!warmup.reconnect(false,Duration::from_millis(10)));
+        assert!(warmup.reconnect(false,Duration::from_secs(3)));
+        assert!(!warmup.reconnect(false,Duration::from_secs(90)),"Real silence does not loop");
+        let mut warmup=StartupWarmup::default();
+        assert!(!warmup.reconnect(true,Duration::from_millis(20)));
+        assert!(!warmup.reconnect(false,Duration::from_secs(90)),"Silence after playback never restarts a healthy tap");
+    }
     #[test] fn windows_no_packet_silence_is_not_a_callback_failure(){
         assert!(!callback_timeout(false,true,Duration::from_secs(90)));
         assert!(callback_timeout(true,true,Duration::from_secs(9)));

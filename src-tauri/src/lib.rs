@@ -1,3 +1,5 @@
+#[cfg(target_os="macos")]
+mod demo_capture;
 mod audio_analysis;
 #[cfg(any(target_os = "windows", test))]
 mod audio_format;
@@ -1606,6 +1608,8 @@ pub fn run() -> Result<(), String> {
             if settings.music_enabled && app.state::<music::Music>().snapshot().supported {
                 app.state::<music::Music>().request(app.handle().clone(), true);
             }
+            #[cfg(target_os="macos")]
+            demo_capture::start(app.handle().clone());
             Ok(())
             })();
             if let Err(error) = initialized {

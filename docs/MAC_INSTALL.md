@@ -1,6 +1,6 @@
-# Mac 安装 · 0.18.2
+# Mac 安装 · 0.18.3
 
-取得经校验的 `ChatGPT-Pulse-0.18.2-mac-universal.dmg`（从 0.18.2 Release 下载），双击打开，将 **ChatGPT Pulse** 拖到 **Applications（应用程序）** 图标。复制完成后推出磁盘映像，从应用程序中启动。
+取得经校验的 `ChatGPT-Pulse-0.18.3-mac-universal.dmg`（从 0.18.3 Release 下载），双击打开，将 **ChatGPT Pulse** 拖到 **Applications（应用程序）** 图标。复制完成后推出磁盘映像，从应用程序中启动。
 
 也可将应用放到当前用户的 `~/Applications`，方便没有系统应用目录写入权限的用户。无需 Node、Rust、Python、VS Code 或完整 Xcode。不要长期直接从只读 DMG 中运行；启动联动应在复制完成后启用。
 

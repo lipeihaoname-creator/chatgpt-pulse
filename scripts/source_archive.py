@@ -16,7 +16,7 @@ PUBLIC_DOCS = [
     'DEPENDENCIES.md', 'LICENSING.md', 'RELEASE.md', 'WINDOWS_DEPENDENCIES.md',
     'WINDOWS_INSTALL.md', 'WINDOWS_BUILD.md', 'WINDOWS_ACCEPTANCE.md',
     'RELEASE_READINESS.md', 'MAC_INSTALL.md', 'MAC_ACCEPTANCE.md',
-    'RELEASE_0.16.6.zh-CN.md', 'DEMOS.md', 'MUSIC_REACTIVE.md', 'SPECTRUM_STUDIO.md', 'WINDOWS_MUSIC_WORK_PROMPT.md', 'WINDOWS_MUSIC_REPORT.md', 'RELEASE_0.18.2.zh-CN.md', 'MAC_MERGE_REPORT.md', 'GITHUB_RELEASE_DRAFT.zh-CN.md', 'MAC_REVIEW_20261029.md',
+    'RELEASE_0.16.6.zh-CN.md', 'DEMOS.md', 'MUSIC_REACTIVE.md', 'SPECTRUM_STUDIO.md', 'WINDOWS_MUSIC_WORK_PROMPT.md', 'WINDOWS_MUSIC_REPORT.md', 'RELEASE_0.18.2.zh-CN.md', 'MAC_MERGE_REPORT.md', 'GITHUB_RELEASE_DRAFT.zh-CN.md', 'MAC_REVIEW_20261029.md', 'MAC_AUDIO_STARTUP_0.18.3.md', 'RELEASE_0.18.3.zh-CN.md',
 ]
 BLOCKED = {'.tools', 'node_modules', 'target', 'dist', 'release', 'test-results',
            '.git', '.codex', '.agents', '.aws', '__pycache__', '.venv', 'design'}
