@@ -47,11 +47,11 @@ Mac / Windows 桌面上的 Work / Codex 工作监测与角色悬浮窗。读取�
 - 麻衣、洛琪希角色主题，状态表情、飘动粒子、随机空闲互动、勿扰和减少动态效果。
 - 本地数字摘要可选保存，默认关闭；不保存聊天正文，不调用额外 AI 或收费 API。
 
-## 0.18.2 音乐律动公开测试版
+## 音乐律动
 
 新增系统播放音频频谱、确认空闲时的人物律动及音乐话题，默认关闭；不访问麦克风、不保存或上传音频。Mac 使用 Core Audio（采集需 14.2+），Windows 使用 WASAPI 回环（采集需 Windows 10 1703+）。提供六种频谱、条带对比度及可保存/分享的外观方案；工作和用户交互优先。
 
-0.18.2 提供 Mac 音乐版与 Windows 已验收的音乐安装器，保留旧版供回退。安装资产与两端验证范围见 [0.18.2 整合说明](docs/RELEASE_0.18.2.zh-CN.md)，功能见 [音乐律动](docs/MUSIC_REACTIVE.md) 和 [频谱工作室](docs/SPECTRUM_STUDIO.md)。
+当前统一提供 Mac 0.18.3 与 Windows 0.18.2 的已验收安装器。安装资产与两端验证范围见 [当前版本说明](docs/RELEASE_0.18.3.zh-CN.md)，功能见 [音乐律动](docs/MUSIC_REACTIVE.md) 和 [频谱工作室](docs/SPECTRUM_STUDIO.md)。
 
 本轮维护修复与实测范围见 [2026-10-29 检查记录](docs/MAC_REVIEW_20261029.md)。Mac 从 0.16.6 升级需重新设置偏好及音频权限，旧数据保留；当前音乐版用户沿用原设置。
 
@@ -62,11 +62,11 @@ Mac / Windows 桌面上的 Work / Codex 工作监测与角色悬浮窗。读取�
 | 下载文件 | 用途 |
 |---|---|
 | [`ChatGPT-Pulse-0.18.3-mac-universal.dmg`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/ChatGPT-Pulse-0.18.3-mac-universal.dmg) | Mac 安装盘，打开后将应用拖到 Applications；包含 Apple Silicon 与 Intel，最低 macOS 13.3 |
-| [`ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe) | Windows 默认完整离线安装器，包含微软 WebView2 安装组件 |
-| [`ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe) | Windows 小体积联网版，缺少 WebView2 时需联网下载 |
+| [`ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe) | Windows 默认完整离线安装器，包含微软 WebView2 安装组件 |
+| [`ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe) | Windows 小体积联网版，缺少 WebView2 时需联网下载 |
 | [`ChatGPT-Pulse-0.18.3-source.zip`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/ChatGPT-Pulse-0.18.3-source.zip) | 两平台统一源码，不含开发工具、个人日志和数据库 |
 
-使用者无需 Node、Rust、Python 或开发服务器。Mac 步骤见 [Mac 安装说明](docs/MAC_INSTALL.md)，Windows 两个安装器任选其一，见 [Windows 使用说明](docs/WINDOWS_INSTALL.md)。Windows EXE 未签名，可能出现发布者未知提示；无需关闭系统安全功能。下载后可按 [`SHA256SUMS`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/SHA256SUMS.txt) 核对 Mac 文件；Windows 校验清单见 0.18.2 发布页。PowerShell 步骤见 [Windows 下载校验](docs/WINDOWS_INSTALL.md#下载与校验)。
+使用者无需 Node、Rust、Python 或开发服务器。Mac 步骤见 [Mac 安装说明](docs/MAC_INSTALL.md)，Windows 两个安装器任选其一，见 [Windows 使用说明](docs/WINDOWS_INSTALL.md)。Windows EXE 未签名，可能出现发布者未知提示；无需关闭系统安全功能。下载后可按 [`SHA256SUMS`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/SHA256SUMS.txt) 核对 Mac 和 Windows 文件；当前安装器统一在最新发布页下载。PowerShell 步骤见 [Windows 下载校验](docs/WINDOWS_INSTALL.md#下载与校验)。
 
 默认读取当前用户的 `~/.codex/sessions`。若客户端配置了自定义位置，Pulse 进程可通过绝对路径环境变量 `CODEX_HOME` 指向该目录。普通 ChatGPT 聊天、浏览器聊天和不生成兼容本地日志的客户端不在支持范围内。工作日志监测无需辅助功能、屏幕录制或全磁盘访问权限；可选音乐律动需要系统音频录制授权。
 

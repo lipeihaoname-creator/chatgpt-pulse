@@ -4,11 +4,11 @@
 
 ## 下载与校验
 
-[ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe)
+[ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe)
 
-[ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe)
+[ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe)
 
-[SHA256SUMS.txt](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/SHA256SUMS.txt)
+[SHA256SUMS.txt](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/SHA256SUMS.txt)
 
 在 PowerShell 执行 `Get-FileHash -Algorithm SHA256 .\下载的安装包.exe`，将结果与 SHA256SUMS.txt 中同名文件比较。
 

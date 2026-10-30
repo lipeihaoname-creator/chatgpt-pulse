@@ -87,5 +87,12 @@ class MusicReleaseDownloadsTests(ReleaseDownloadsTests):
         with self.assertRaisesRegex(ValueError,'Invalid or duplicate checksum'):self.verify()
 
 
+class UnifiedLatestReleaseDownloadsTests(MusicReleaseDownloadsTests):
+    def setUp(self):
+        super().setUp()
+        self.base=f'https://github.com/{release_check.REPOSITORY}/releases/download/v0.18.3/'
+        self.release['tag_name']='v0.18.3';self.update_assets()
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -46,14 +46,14 @@ Latest macOS fix: **0.18.3**; Windows remains the validated **0.18.2** music bui
 | Platform | Package | Verification scope |
 |---|---|---|
 | macOS 13.3+ | [`ChatGPT-Pulse-0.18.3-mac-universal.dmg`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/ChatGPT-Pulse-0.18.3-mac-universal.dmg) | Universal Apple Silicon / Intel binary; see [Mac acceptance](docs/MAC_ACCEPTANCE.md) for actual tests |
-| Windows x64 | [`ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe) | Offline installer including WebView2 setup; tested on the handoff machine only |
-| Windows x64, online | [`ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.2/ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe) | Smaller alternative; internet needed for missing WebView2 |
+| Windows x64 | [`ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/ChatGPT-Pulse-0.18.2-windows-x64-music-offline-setup.exe) | Offline installer including WebView2 setup; tested on the handoff machine only |
+| Windows x64, online | [`ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe`](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/ChatGPT-Pulse-0.18.2-windows-x64-music-online-setup.exe) | Smaller alternative; internet needed for missing WebView2 |
 
 Checksums: [SHA256SUMS](https://github.com/voidlph-dev/chatgpt-pulse/releases/download/v0.18.3/SHA256SUMS.txt). See the [Windows verification steps](docs/WINDOWS_INSTALL.md#下载与校验).
 
 On macOS, open the DMG and drag the app to Applications. On Windows, install one of the two EXEs. End users do not need Node.js, Rust, Python or a development server. The Mac candidate is ad hoc signed and not notarized; Windows installers are unsigned. Check [Mac installation](docs/MAC_INSTALL.md) or [Windows installation](docs/WINDOWS_INSTALL.md) before testing.
 
-## 0.18.2 music integration
+## Music integration
 
 The candidate adds local system-output visualization (Core Audio on macOS 14.2+, WASAPI loopback on Windows 10 1703+), six spectrum styles, shareable custom presets and low-priority idle portrait motion/dialogue. Capture is opt-in; no microphone, captured-audio files or upload. Work and interaction always take priority.
 

@@ -49,10 +49,17 @@ def verify(tag):
     base = f'https://github.com/{REPOSITORY}/releases/download/{tag}/'
     with request(f'https://api.github.com/repos/{REPOSITORY}/releases/tags/{tag}', api=True) as response:
         release = json.loads(response.read(2 * 1024 * 1024))
-    music = any(a['name'].startswith(f'ChatGPT-Pulse-{version}-windows-x64-music-') for a in release['assets'])
-    names = [f'ChatGPT-Pulse-{version}-windows-x64-music-offline-setup.exe',
-             f'ChatGPT-Pulse-{version}-windows-x64-music-online-setup.exe'] if music else [
-             f'ChatGPT-Pulse-{version}-windows-x64-setup.exe', f'ChatGPT-Pulse-{version}-windows-x64-online-setup.exe']
+    # A release can collect the latest build for each platform. Preserve the
+    # actual Windows binary version instead of guessing it from the Mac tag.
+    pattern = re.compile(r'^ChatGPT-Pulse-(\d+\.\d+\.\d+)-windows-x64-(?:music-(?:offline|online)-setup|(?:online-)?setup)\.exe$')
+    versions = {m[1] for asset in release['assets'] if (m := pattern.fullmatch(asset['name']))}
+    if not versions:
+        raise ValueError('Missing or incomplete asset: Windows installer')
+    windows_version = max(versions, key=lambda v:tuple(map(int,v.split('.'))))
+    music = any(a['name'].startswith(f'ChatGPT-Pulse-{windows_version}-windows-x64-music-') for a in release['assets'])
+    names = [f'ChatGPT-Pulse-{windows_version}-windows-x64-music-offline-setup.exe',
+             f'ChatGPT-Pulse-{windows_version}-windows-x64-music-online-setup.exe'] if music else [
+             f'ChatGPT-Pulse-{windows_version}-windows-x64-setup.exe', f'ChatGPT-Pulse-{windows_version}-windows-x64-online-setup.exe']
     manifest_name = 'SHA256SUMS.txt' if any(a['name']=='SHA256SUMS.txt' for a in release['assets']) else 'SHA256SUMS'
     if release['draft'] or release['tag_name'] != tag:
         raise ValueError('Release must be public and match the requested tag')
