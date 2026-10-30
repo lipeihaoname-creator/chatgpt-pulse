@@ -1,3 +1,13 @@
+## 0.18.3 音乐律动实录 · 2026-10-30
+
+以下 GIF 来自打包 Mac 应用自身 WKWebView 的连续快照，并非浏览器模拟。生成的测试信号经系统播放，再由实际 Core Audio 采集驱动频谱和人物；没有录制系统音频文件、桌面、真实聊天或账号。仅等比例缩放、透明区域合成单色背景和 GIF 编码，没有补画 UI。
+
+![麻衣半环频谱实录](media/music-mai-arc-macos.gif)
+
+![洛琪希横条频谱实录](media/music-roxy-bars-macos.gif)
+
+每段为连续 8 秒、80 帧，按 10 fps 编码。采集 API 约每 100 ms 请求一帧，不宣称这是应用实际绘制刷新率。原生测试确认真实音频活动和至少三个不同人物姿态。来源与摘要见 [music-capture-manifest.json](media/music-capture-manifest.json)。以下旧版演示保留原版本标签。
+
 # 实机演示 / Native demos
 
 [返回中文首页](../README.md) · [English README](../README.en.md)

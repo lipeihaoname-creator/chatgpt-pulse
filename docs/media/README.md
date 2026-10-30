@@ -7,3 +7,5 @@ PNG 为截图裁剪或等比例缩放；themes-macos.png 为六张原生设置�
 capture-manifest.json 记录每份成品的尺寸、帧数、SHA-256 和应用二进制摘要。不包含本机用户名、目录、聊天或账号信息。角色相关素材的原有权利边界见 [ASSETS.md](../ASSETS.md)，本目录不额外授予角色权利。
 
 `music-reactive-working-macos.png`：2026-10-28 Mac 音乐开发候选的原生窗口截图。系统音频来自隔离合成 PCM 经 macOS 输出播放，频谱由真正的 Core Audio 采集驱动；工作日志为明确标注的隔离模拟，不使用真实对话。
+
+0.18.3 音乐 GIF 与 PNG 为应用自身 WKWebView 连续快照；真实 Core Audio 采集生成的测试播放，没有桌面采集或聊天内容。80 帧、10 fps、8 秒，按统一比例缩放并合成单色背景。来源和摘要见 music-capture-manifest.json。

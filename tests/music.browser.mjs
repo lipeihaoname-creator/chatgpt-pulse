@@ -53,7 +53,8 @@ try{
   await new Promise(resolve=>setTimeout(resolve,350));observer.disconnect();return writes;
  });
  assert.equal(idleWrites,0);
- await page.evaluate(()=>window.patch({task_display:'combined'}));await page.waitForTimeout(100);
+ await page.evaluate(()=>window.patch({task_display:'combined'}));
+ await page.waitForFunction(()=>{const a=document.querySelector('.pet-image')?.getBoundingClientRect(),b=document.querySelector('.pet-bubble')?.getBoundingClientRect();return a&&b&&Math.abs(a.y+a.height/2-b.y-b.height/2)<1;},{},{timeout:3000});
  const combinedCenter=await page.evaluate(()=>{const a=document.querySelector('.pet-image').getBoundingClientRect(),b=document.querySelector('.pet-bubble').getBoundingClientRect();return Math.abs(a.y+a.height/2-b.y-b.height/2);});assert.ok(combinedCenter<1,combinedCenter);
  await page.evaluate(()=>window.patch({task_display:'separate'}));
  checks.push('Real work-state fixture stops music motion while spectrum, particles, tasks and single avatar remain; settled music pose does no per-packet DOM work');

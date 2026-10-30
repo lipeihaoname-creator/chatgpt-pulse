@@ -46,7 +46,7 @@ try:
  command('restore');until(lambda:probe('audio').get('view_visible') is True and probe('overlay').get('rendered_music_moving') is True,'Unminimizing restores actual music motion')
  helper=folder/'own-app-quit';subprocess.run(['xcrun','clang','tests/graceful-quit.m','-framework','AppKit','-framework','Foundation','-o',str(helper)],cwd=root,check=True,capture_output=True);subprocess.run([str(helper),str(app.pid)],check=True);app.wait(timeout=10);assert app.returncode==0
  checks.append('Normal AppKit Quit exits with active audio, without forcing a signal')
- result=dict(passed=True,version='0.18.2',system_audio_real=True,work_logs_synthetic=True,user_settings_accessed=False,window_logical_size=[280,144],checks=checks);(folder/'result.json').write_text(json.dumps(result,indent=2));(root/'test-results/music-lifecycle-native.json').write_text(json.dumps(result,indent=2));print(json.dumps(result),flush=True)
+ result=dict(passed=True,version=json.loads((root/'package.json').read_text())['version'],system_audio_real=True,work_logs_synthetic=True,user_settings_accessed=False,window_logical_size=[280,144],checks=checks);(folder/'result.json').write_text(json.dumps(result,indent=2));(root/'test-results/music-lifecycle-native.json').write_text(json.dumps(result,indent=2));print(json.dumps(result),flush=True)
 finally:
  if play and play.poll() is None:play.terminate();play.wait(timeout=5)
  if app.poll() is None:app.terminate();app.wait(timeout=10)

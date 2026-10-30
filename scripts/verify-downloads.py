@@ -102,7 +102,7 @@ def verify(tag):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--tag', default='v'+json.loads((Path(__file__).resolve().parents[1]/'package.json').read_text())['version'])
+    parser.add_argument('--tag', required=True, help='Explicit Release containing Windows installers, e.g. v0.18.2')
     arguments = parser.parse_args()
     try:
         verify(arguments.tag)
